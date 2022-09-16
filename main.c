@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/16 19:33:51 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/16 19:53:00 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,7 @@ int	main(int argc, char **argv, char **env)
 	if (argc < 5)
 		return (write(2, "Too few arguments.\n", 19));
 	commands = get_commands(argc, argv);
-	while (j < argc - 3)
-	{
-		while (commands[j][i])
-		{
-			printf("%s\n", commands[j][i]);
-			i++;
-		}
-		i = 0;
-		j++;
-	}
+	print3darray(argc, commands);
 	/* if (pipe(fd) == -1)
 		error_pipe();
 	pid1 = fork();

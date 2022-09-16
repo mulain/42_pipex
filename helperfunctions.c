@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   helperfunctions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/16 19:52:28 by wmardin          ###   ########.fr       */
+/*   Created: 2022/09/16 19:50:17 by wmardin           #+#    #+#             */
+/*   Updated: 2022/09/16 19:52:12 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
+#include "pipex.h"
 
-# define PIPEX_H
-# include "libft/include/libft.h"
-# include <fcntl.h>
-# include <stdio.h>
+void	print3darray(int argc, char ***array)
+{
+	int		i;
+	int		j;
 
-# include <unistd.h>
-# include <sys/errno.h>
-# include <string.h>
-
-//errors.c
-void	error_pipe(void);
-void	error_fork(void);
-
-//getcommands.c
-char	***get_commands(int argc, char **argv);
-
-//helperfunctions.c
-void	print3darray(int argc, char ***array);
-
-#endif
+	i = 0;
+	j = 0;
+	while (j < argc - 3)
+	{
+		while (array[j][i])
+		{
+			ft_printf("%s\n", array[j][i]);
+			i++;
+		}
+		i = 0;
+		ft_printf("\n");
+		j++;
+	}
+}
