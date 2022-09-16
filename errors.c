@@ -1,28 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/16 18:27:12 by wmardin          ###   ########.fr       */
+/*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
+/*   Updated: 2022/09/16 18:27:05 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
+#include "pipex.h"
 
-# define PIPEX_H
-# include "libft/include/libft.h"
-# include <fcntl.h>
-# include <stdio.h>
+void	error_pipe(void)
+{
+	perror("Pipe failed.\n");
+	exit(EXIT_FAILURE);
+}
 
-# include <unistd.h>
-# include <sys/errno.h>
-# include <string.h>
-
-//errors.c
-void	error_pipe(void);
-void	error_fork(void);
-
-#endif
+void	error_fork(void)
+{
+	perror("Fork failed.\n");
+	exit(EXIT_FAILURE);
+}
