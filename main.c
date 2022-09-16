@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/16 18:28:25 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/16 19:33:51 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,41 @@ execve, exit, fork, pipe, unlink, wait, waitpid
 
 fd[1] is write end
 fd[2] is read end
+
+This:
+$> ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
+Should behave like:
+< file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
+
+pipex	file1	cmd1	cmd2	cmdn		cmdlast			file2
+argv_0	argv_1	argv_2	argv_3	argv_n+1 	argv_argc-1		argv_argc
 */
 int	main(int argc, char **argv, char **env)
 {
-	int		fd[2];
+	/* int		fd[2];
 	int		pid1;
-	int		pid2;
+	int		pid2; */
+	char	***commands;
+	int		i;
+	int		j;
 
 	(void)env;
+	i = 0;
+	j = 0;
 	if (argc < 5)
 		return (write(2, "Too few arguments.\n", 19));
-	if (pipe(fd) == -1)
+	commands = get_commands(argc, argv);
+	while (j < argc - 3)
+	{
+		while (commands[j][i])
+		{
+			printf("%s\n", commands[j][i]);
+			i++;
+		}
+		i = 0;
+		j++;
+	}
+	/* if (pipe(fd) == -1)
 		error_pipe();
 	pid1 = fork();
 	if (pid1 == -1)
@@ -66,6 +90,6 @@ int	main(int argc, char **argv, char **env)
 	close(fd[1]);
 	printf("%s\n", argv[1]);
 	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
+	waitpid(pid2, NULL, 0); */
 	return (0);
 }

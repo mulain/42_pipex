@@ -6,7 +6,7 @@
 #    By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 17:11:14 by wmardin           #+#    #+#              #
-#    Updated: 2022/09/16 18:26:18 by wmardin          ###   ########.fr        #
+#    Updated: 2022/09/16 19:31:02 by wmardin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 NAME =	pipex
 SRC =	main.c\
-		errors.c
+		errors.c\
+		get_commands.c
 
 BLUE = \033[94m
 COLOR_END = \033[0m
