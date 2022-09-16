@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/16 19:53:00 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/16 20:02:31 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ Should behave like:
 
 pipex	file1	cmd1	cmd2	cmdn		cmdlast			file2
 argv_0	argv_1	argv_2	argv_3	argv_n+1 	argv_argc-1		argv_argc
+
+leaks -atExit -- ./pipex file1 "string1 a b c" "string2 ab cd ef" "string3 knudel hair shmudel" file2
 */
 int	main(int argc, char **argv, char **env)
 {
@@ -51,7 +53,8 @@ int	main(int argc, char **argv, char **env)
 	if (argc < 5)
 		return (write(2, "Too few arguments.\n", 19));
 	commands = get_commands(argc, argv);
-	print3darray(argc, commands);
+	//print3darray(argc, commands);
+	free3darray(argc, commands);
 	/* if (pipe(fd) == -1)
 		error_pipe();
 	pid1 = fork();

@@ -6,7 +6,7 @@
 #    By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 17:11:14 by wmardin           #+#    #+#              #
-#    Updated: 2022/09/16 19:52:38 by wmardin          ###   ########.fr        #
+#    Updated: 2022/09/16 20:08:56 by wmardin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,11 +46,11 @@ fclean: clean
 re: fclean all
 
 noflag:
-	@$(CC) $(SRC) $(MLXFLAGS) $(DEFINEFLAGS) $(LIBFT) -o $(NAME)
+	@$(CC) $(SRC) $(LIBFT) -o $(NAME)
 	@echo "$(BLUE)$(NAME) created w/o error flags."
 
 test:
-	@echo $(OS)
+	@$(CC) test.c $(LIBFT) -o test
 
 git:
 	git add .
