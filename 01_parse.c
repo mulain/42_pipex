@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 22:15:56 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/17 22:57:31 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	parse(t_envl *e, int argc, char **argv, char **env)
 	e->argv = argv;
 	e->env = env;
 	split_input(e);
-	split_path(e);
+	split_env_path(e);
 	get_cmdpaths(e);
 }
 
@@ -62,7 +62,7 @@ void	split_input(t_envl *e)
 -	If the resulting string doesn't end with "/", "/" is appended to create
 	a valid path format.
 */
-void	split_path(t_envl *e)
+void	split_env_path(t_envl *e)
 {
 	int		i;
 	int		len;
@@ -70,19 +70,19 @@ void	split_path(t_envl *e)
 	i = 0;
 	while (ft_strncmp(e->env[i], "PATH=", 5))
 		i++;
-	e->env_path = ft_split(e->env[i] + 5, ':');
+	e->env_paths = ft_split(e->env[i] + 5, ':');
 	i = 0;
-	while (e->env_path[i])
+	while (e->env_paths[i])
 	{
-		len = ft_strlen(e->env_path[i]);
-		if (e->env_path[i][len - 1] != '/')
-			ft_strlcat(e->env_path[i], "/", len + 2);
+		len = ft_strlen(e->env_paths[i]);
+		if (e->env_paths[i][len - 1] != '/')
+			ft_strlcat(e->env_paths[i], "/", len + 2);
 		i++;
 	}
 }
 
 /*
-Returns an array of valid command paths for each received command.
+Returns an array of valid command paths with an entry for each received command.
 -	For each command (first while with e.input[i]):
 	-	cycles thorugh all paths until a valid path is found
 		-	duplicates the paths and cats the command until access returns
@@ -100,9 +100,9 @@ void	get_cmdpaths(t_envl *e)
 	j = 0;
 	while (e->input[i])
 	{
-		while (e->env_path[j])
+		while (e->env_paths[j])
 		{
-			e->cmdpath[i] = strdup(e->env_path[j]);
+			e->cmdpath[i] = strdup(e->env_paths[j]);
 			total_len = ft_strlen(e->cmdpath[i]) + ft_strlen(e->input[i][0]);
 			ft_strlcat(e->cmdpath[i], e->input[i][0], total_len + 1);
 			if (access(e->cmdpath[i], X_OK))
