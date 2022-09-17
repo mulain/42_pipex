@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/16 20:02:31 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/17 10:58:56 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,28 @@ leaks -atExit -- ./pipex file1 "string1 a b c" "string2 ab cd ef" "string3 knude
 int	main(int argc, char **argv, char **env)
 {
 	/* int		fd[2];
-	int		pid1;
-	int		pid2; */
-	char	***commands;
-	int		i;
-	int		j;
+	int			pid1;
+	int			pid2; */
+	char		***commands;
+	char		*array[3];
+	int			pid;
+	t_envelope	e;
 
 	(void)env;
-	i = 0;
-	j = 0;
 	if (argc < 5)
 		return (write(2, "Too few arguments.\n", 19));
 	commands = get_commands(argc, argv);
+	array[0] = "usr/bin/which";
+	array[1] = "ls";
+	array[2] = NULL;
 	//print3darray(argc, commands);
-	free3darray(argc, commands);
+	pid = fork();
+	if (pid == -1)
+		error_fork();
+	if (pid == 0)
+	{
+		execve("/usr/bin/which", array, env);
+	}
 	/* if (pipe(fd) == -1)
 		error_pipe();
 	pid1 = fork();
@@ -85,5 +93,6 @@ int	main(int argc, char **argv, char **env)
 	printf("%s\n", argv[1]);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0); */
+	free3darray(argc, commands);
 	return (0);
 }
