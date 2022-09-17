@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 20:00:12 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/17 22:17:55 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **env)
 	array[0] = "usr/bin/which";
 	array[1] = "ls";
 	array[2] = NULL;
-	print3darray(argc, e.input);
+	print3darray(&e);
 	pid = fork();
 	if (pid == -1)
 		error_fork();

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 21:01:45 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/17 22:15:56 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	parse(t_envl *e, int argc, char **argv, char **env)
 	e->env = env;
 	split_input(e);
 	split_path(e);
+	get_cmdpaths(e);
 }
 
 /*
@@ -58,13 +59,63 @@ void	split_input(t_envl *e)
 -	Iterates through env until the string starting with "PATH=" is found.
 - 	Splits that string beginning at 5 bytes after the start to omit "PATH=".
 	using delimiter ':'. Result ist stored in e.path.
+-	If the resulting string doesn't end with "/", "/" is appended to create
+	a valid path format.
 */
 void	split_path(t_envl *e)
 {
 	int		i;
+	int		len;
 
 	i = 0;
 	while (ft_strncmp(e->env[i], "PATH=", 5))
 		i++;
-	e->path = ft_split(e->env[i] + 5, ':');
+	e->env_path = ft_split(e->env[i] + 5, ':');
+	i = 0;
+	while (e->env_path[i])
+	{
+		len = ft_strlen(e->env_path[i]);
+		if (e->env_path[i][len - 1] != '/')
+			ft_strlcat(e->env_path[i], "/", len + 2);
+		i++;
+	}
+}
+
+/*
+Returns an array of valid command paths for each received command.
+-	For each command (first while with e.input[i]):
+	-	cycles thorugh all paths until a valid path is found
+		-	duplicates the paths and cats the command until access returns
+			a valid command.
+
+*/
+void	get_cmdpaths(t_envl *e)
+{
+	int		i;
+	int		j;
+	int		total_len;
+
+	e->cmdpath = malloc((e->argc - 3) * sizeof(char *));
+	i = 0;
+	j = 0;
+	while (e->input[i])
+	{
+		while (e->env_path[j])
+		{
+			e->cmdpath[i] = strdup(e->env_path[j]);
+			total_len = ft_strlen(e->cmdpath[i]) + ft_strlen(e->input[i][0]);
+			ft_strlcat(e->cmdpath[i], e->input[i][0], total_len + 1);
+			if (access(e->cmdpath[i], X_OK))
+				free(e->cmdpath[i]);
+			else
+			{
+				printf("%s\n", e->cmdpath[i]);
+				break ;
+			}
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+
 }

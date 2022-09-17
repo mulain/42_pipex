@@ -1,30 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helperfunctions.c                                  :+:      :+:    :+:   */
+/*   09_helperfunctions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 19:50:17 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 09:41:58 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/17 22:18:40 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	print3darray(int argc, char ***array)
+void	print3darray(t_envl *e)
 {
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	while (j < argc - 3)
+	while (j < e->argc - 3)
 	{
 		ft_printf("---Cmd %i---\n", j);
-		while (array[j][i])
+		while (e->input[j][i])
 		{
-			ft_printf("%s\n", array[j][i]);
+			ft_printf("%s\n", e->input[j][i]);
 			i++;
 		}
 		i = 0;
