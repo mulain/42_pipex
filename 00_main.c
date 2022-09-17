@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   00_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 10:58:56 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/17 20:00:12 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,29 +33,23 @@ $> ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
 Should behave like:
 < file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
 
-pipex	file1	cmd1	cmd2	cmdn		cmdlast			file2
-argv_0	argv_1	argv_2	argv_3	argv_n+1 	argv_argc-1		argv_argc
-
 leaks -atExit -- ./pipex file1 "string1 a b c" "string2 ab cd ef" "string3 knudel hair shmudel" file2
 */
 int	main(int argc, char **argv, char **env)
 {
-	/* int		fd[2];
-	int			pid1;
-	int			pid2; */
-	char		***commands;
+	// int		fd[2];
 	char		*array[3];
 	int			pid;
-	t_envelope	e;
+	t_envl		e;
 
 	(void)env;
 	if (argc < 5)
 		return (write(2, "Too few arguments.\n", 19));
-	commands = get_commands(argc, argv);
+	parse(&e, argc, argv, env);
 	array[0] = "usr/bin/which";
 	array[1] = "ls";
 	array[2] = NULL;
-	//print3darray(argc, commands);
+	print3darray(argc, e.input);
 	pid = fork();
 	if (pid == -1)
 		error_fork();
@@ -93,6 +87,6 @@ int	main(int argc, char **argv, char **env)
 	printf("%s\n", argv[1]);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0); */
-	free3darray(argc, commands);
+	//free3darray(argc, commands);
 	return (0);
 }

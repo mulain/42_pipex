@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_commands.c                                     :+:      :+:    :+:   */
+/*   01_parse.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 10:53:41 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/17 20:08:48 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 /*
 Returns a 3d array with the split up commands.
-Array level 3: pointers to each command string "sentence", i.e. 2d array.
-Array level 2: The chain of strings (sentence) from each commmand
-Array level 1: The single words from each command sentence.
+Array level 3: Array of the command string "sentences".
+Array level 2: Array of the words from each commmand (single sentence).
+Array level 1: Array of the chars from each word (single words).
 
 Figuring out the correct numbers for the arguments from argv:
 input			pipex	file1	cmd_1	cmd_2	cmd_3	file2
@@ -32,26 +32,34 @@ malloc n = argc - 3 because:
 -1 for file 1
 -1 for file 2
 */
-char	***get_commands(int argc, char **argv)
+void	parse(t_envl *e, int argc, char **argv, char **env)
 {
-	char	***commands;
 	int		i;
-	int		j;
 
-	commands = malloc((argc - 3) * sizeof(char **));
+	e->argc = argc;
+	e->argv = argv;
+	e->env = env;
+	parse_cmds(e);
+}
+
+void	split_input(t_envl *e)
+{
+	int		i;
+
+	i = 0;
+	e->input = malloc((e->argc - 3) * sizeof(char **));
 	i = 2;
-	while (i < argc - 1)
+	while (i < e->argc - 1)
 	{
-		commands[i - 2] = ft_split(argv[i], ' ');
+		e->input[i - 2] = ft_split(e->argv[i], ' ');
 		i++;
 	}
+}
+
+void	split_path(t_envl *e)
+{
+	int		i;
+
 	i = 0;
-	j = 0;
-	printf("%s\n", commands[0][0]);
-	while (j < argc - 3)
-	{
-		free(commands[j][0]);
-		j++;
-	}
-	return (commands);
+	
 }
