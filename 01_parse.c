@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 22:44:01 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 22:59:50 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,25 +90,24 @@ void	split_env_path(t_envl *e)
 
 /*
 Iterates through the received commands.
-Call get_singlepath for each command to find the correct path / test if
+Calls get_singlepath for each command to find the correct path / test if
 there is a path. If no path is found, exits. If a path is found, get_singlepath
-writes it to the struct.
+writes it to the struct. Ends with assigning a NULL pointer.
 */
 void	get_cmdpaths(t_envl *e)
 {
 	int		i;
 
-	e->cmdpaths = malloc((e->argc - 3) * sizeof(char *));
+	e->cmdpaths = malloc((e->argc - 2) * sizeof(char *));
 	i = 0;
-	//while (e->input[i])
-	while (i < e->argc - 3)
+	while (e->input[i])
 	{
-		printf("i:%i\n", i);
 		if (get_singlepath(e, i))
 			i++;
 		else
 			error_path();
 	}
+	e->cmdpaths[i] = NULL;
 }
 
 /*
@@ -140,10 +139,6 @@ int	get_singlepath(t_envl *e, int i)
 		j++;
 	}
 	if (e->cmdpaths[i])
-	{
-		printf("%s\n", e->cmdpaths[i]);
 		return (1);
-
-	}
 	return (0);
 }

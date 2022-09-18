@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 22:47:16 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 22:53:52 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ int	main(int argc, char **argv, char **env)
 	/* array[0] = "usr/bin/which";
 	array[1] = "ls";
 	array[2] = NULL; */
-	printf("hello\n");
-	//print2d(e.cmdpaths);
+	print2d(e.cmdpaths);
 	print3d(e.input);
 	/* pid = fork();
 	if (pid == -1)
