@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 09:34:59 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 22:47:32 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	error_fork(void);
 void	error_path(void);
 
 //09_helperfunctions.c
-void	print3d_input(t_envl *e);
+void	print3d(char ***array);
 void	print2d(char **array);
 void	free3darray(int argc, char ***array);
 

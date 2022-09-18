@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 22:08:17 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 22:44:01 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,24 @@ cmd_n		cmd_last		file2
 argv_n+1 	argv_argc-2		argv_argc-1
 argc_n+2
 
-malloc n = argc - 3 because:
+malloc n = argc - 2 because:
 -1 for program name
 -1 for file 1
 -1 for file 2
++1 for NULL
 */
 void	split_input(t_envl *e)
 {
 	int		i;
 
-	e->input = malloc((e->argc - 3) * sizeof(char **));
+	e->input = malloc((e->argc - 2) * sizeof(char **));
 	i = 2;
 	while (i < e->argc - 1)
 	{
 		e->input[i - 2] = ft_split(e->argv[i], ' ');
 		i++;
 	}
+	e->input[i - 2] = NULL;
 }
 
 /*
@@ -87,8 +89,10 @@ void	split_env_path(t_envl *e)
 }
 
 /*
-
-
+Iterates through the received commands.
+Call get_singlepath for each command to find the correct path / test if
+there is a path. If no path is found, exits. If a path is found, get_singlepath
+writes it to the struct.
 */
 void	get_cmdpaths(t_envl *e)
 {
@@ -96,8 +100,10 @@ void	get_cmdpaths(t_envl *e)
 
 	e->cmdpaths = malloc((e->argc - 3) * sizeof(char *));
 	i = 0;
-	while (e->input[i])
+	//while (e->input[i])
+	while (i < e->argc - 3)
 	{
+		printf("i:%i\n", i);
 		if (get_singlepath(e, i))
 			i++;
 		else
@@ -134,35 +140,10 @@ int	get_singlepath(t_envl *e, int i)
 		j++;
 	}
 	if (e->cmdpaths[i])
-		return (1);
-	return (0);
-}
-
-void	SAVEget_cmdpaths(t_envl *e)
-{
-	int		i;
-	int		j;
-	int		total_len;
-
-	e->cmdpaths = malloc((e->argc - 3) * sizeof(char *));
-	i = 0;
-	while (e->input[i])
 	{
-		j = 0;
-		while (e->env_paths[j])
-		{
-			e->cmdpaths[i] = strdup(e->env_paths[j]);
-			total_len = ft_strlen(e->cmdpaths[i]) + ft_strlen(e->input[i][0]);
-			ft_strlcat(e->cmdpaths[i], e->input[i][0], total_len + 1);
-			if (access(e->cmdpaths[i], X_OK))
-			{
-				free(e->cmdpaths[i]);
-				e->cmdpaths[i] = NULL;
-			}
-			else
-				break ;
-			j++;
-		}
-		i++;
+		printf("%s\n", e->cmdpaths[i]);
+		return (1);
+
 	}
+	return (0);
 }

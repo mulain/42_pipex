@@ -6,25 +6,28 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 19:50:17 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 09:16:01 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 22:48:58 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	print3d_input(t_envl *e)
+/*
+Prints a 3d char array. Must be NULL terminated.
+*/
+void	print3d(char ***array)
 {
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	while (j < e->argc - 3)
+	while (array[j])
 	{
 		ft_printf("---Cmd %i---\n", j);
-		while (e->input[j][i])
+		while (array[j][i])
 		{
-			ft_printf("%s\n", e->input[j][i]);
+			ft_printf("%s\n", array[j][i]);
 			i++;
 		}
 		i = 0;
@@ -32,6 +35,9 @@ void	print3d_input(t_envl *e)
 	}
 }
 
+/*
+Prints a 2d char array. Must be NULL terminated.
+*/
 void	print2d(char **array)
 {
 	int		i;
