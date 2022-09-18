@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 22:53:52 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 23:13:11 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,6 @@ int	main(int argc, char **argv, char **env)
 	printf("%s\n", argv[1]);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0); */
-	//free3darray(argc, commands);
+	free3darray(e.input);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 19:50:17 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 22:48:58 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 23:12:56 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ void	print2d(char **array)
 	}
 }
 
-void	free3darray(int argc, char ***array)
+void	free3darray(char ***array)
 {
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 0;
-	while (j < argc - 3)
+	while (array[j])
 	{
 		while (array[j][i])
 		{

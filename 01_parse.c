@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 22:59:50 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 23:08:12 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ more paths exist to try.
 		-	frees and nulls
 		-	increments j and tries the next command path
 	-	if access = 0:
+		- current command path is kept
 		- the while condition !e.cmdpaths[i] breaks
 Returns 1 or 0 depending on e.cmdpaths[i].
 */
