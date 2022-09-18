@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   errors.c                                           :+:      :+:    :+:   */
+/*   08_errors.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/16 18:27:05 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 09:44:13 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,18 @@
 
 void	error_pipe(void)
 {
-	perror("Pipe failed.\n");
+	perror("Pipe");
 	exit(EXIT_FAILURE);
 }
 
 void	error_fork(void)
 {
-	perror("Fork failed.\n");
+	perror("Fork");
+	exit(EXIT_FAILURE);
+}
+
+void	error_path(void)
+{
+	perror("Search command path");
 	exit(EXIT_FAILURE);
 }

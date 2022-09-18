@@ -6,13 +6,13 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 19:50:17 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 22:18:40 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 09:16:01 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	print3darray(t_envl *e)
+void	print3d_input(t_envl *e)
 {
 	int		i;
 	int		j;
@@ -29,6 +29,19 @@ void	print3darray(t_envl *e)
 		}
 		i = 0;
 		j++;
+	}
+}
+
+void	print2d(char **array)
+{
+	int		i;
+
+	i = 0;
+	while (array[i])
+	{
+		ft_printf("---Cmd %i---\n", i);
+		ft_printf("%s\n", array[i]);
+		i++;
 	}
 }
 

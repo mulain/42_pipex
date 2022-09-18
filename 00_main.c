@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 22:17:55 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 10:12:04 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,25 +38,26 @@ leaks -atExit -- ./pipex file1 "string1 a b c" "string2 ab cd ef" "string3 knude
 int	main(int argc, char **argv, char **env)
 {
 	// int		fd[2];
-	char		*array[3];
-	int			pid;
+	/* char		*array[3];
+	int			pid; */
 	t_envl		e;
 
 	(void)env;
 	if (argc < 5)
 		return (write(2, "Too few arguments.\n", 19));
 	parse(&e, argc, argv, env);
-	array[0] = "usr/bin/which";
+	/* array[0] = "usr/bin/which";
 	array[1] = "ls";
-	array[2] = NULL;
-	print3darray(&e);
-	pid = fork();
+	array[2] = NULL; */
+	print2d(e.cmdpaths);
+	print3d_input(&e);
+	/* pid = fork();
 	if (pid == -1)
 		error_fork();
 	if (pid == 0)
 	{
 		execve("/usr/bin/which", array, env);
-	}
+	} */
 	/* if (pipe(fd) == -1)
 		error_pipe();
 	pid1 = fork();

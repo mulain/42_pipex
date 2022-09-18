@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 22:57:31 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 22:08:17 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	split_env_path(t_envl *e)
 {
 	int		i;
 	int		len;
+	char	*temp;
 
 	i = 0;
 	while (ft_strncmp(e->env[i], "PATH=", 5))
@@ -76,46 +77,92 @@ void	split_env_path(t_envl *e)
 	{
 		len = ft_strlen(e->env_paths[i]);
 		if (e->env_paths[i][len - 1] != '/')
-			ft_strlcat(e->env_paths[i], "/", len + 2);
+		{
+			temp = e->env_paths[i];
+			e->env_paths[i] = ft_strjoin(e->env_paths[i], "/");
+			free(temp);
+		}
 		i++;
 	}
 }
 
 /*
-Returns an array of valid command paths with an entry for each received command.
--	For each command (first while with e.input[i]):
-	-	cycles thorugh all paths until a valid path is found
-		-	duplicates the paths and cats the command until access returns
-			a valid command.
+
 
 */
 void	get_cmdpaths(t_envl *e)
 {
 	int		i;
+
+	e->cmdpaths = malloc((e->argc - 3) * sizeof(char *));
+	i = 0;
+	while (e->input[i])
+	{
+		if (get_singlepath(e, i))
+			i++;
+		else
+			error_path();
+	}
+}
+
+/*
+Returns 1 if a valid path for the command of index i was found, 0 if not.
+Joins env_paths[n] to the command until a valid command path is found or no
+more paths exist to try.
+-	uses access to determine if file exists and has exec rights
+	-	if access != 0:
+		-	frees and nulls
+		-	increments j and tries the next command path
+	-	if access = 0:
+		- the while condition !e.cmdpaths[i] breaks
+Returns 1 or 0 depending on e.cmdpaths[i].
+*/
+int	get_singlepath(t_envl *e, int i)
+{
+	int		j;
+
+	j = 0;
+	e->cmdpaths[i] = NULL;
+	while (e->env_paths[j] && !e->cmdpaths[i])
+	{
+		e->cmdpaths[i] = ft_strjoin(e->env_paths[j], e->input[i][0]);
+		if (access(e->cmdpaths[i], X_OK))
+		{
+			free(e->cmdpaths[i]);
+			e->cmdpaths[i] = NULL;
+		}
+		j++;
+	}
+	if (e->cmdpaths[i])
+		return (1);
+	return (0);
+}
+
+void	SAVEget_cmdpaths(t_envl *e)
+{
+	int		i;
 	int		j;
 	int		total_len;
 
-	e->cmdpath = malloc((e->argc - 3) * sizeof(char *));
+	e->cmdpaths = malloc((e->argc - 3) * sizeof(char *));
 	i = 0;
-	j = 0;
 	while (e->input[i])
 	{
+		j = 0;
 		while (e->env_paths[j])
 		{
-			e->cmdpath[i] = strdup(e->env_paths[j]);
-			total_len = ft_strlen(e->cmdpath[i]) + ft_strlen(e->input[i][0]);
-			ft_strlcat(e->cmdpath[i], e->input[i][0], total_len + 1);
-			if (access(e->cmdpath[i], X_OK))
-				free(e->cmdpath[i]);
-			else
+			e->cmdpaths[i] = strdup(e->env_paths[j]);
+			total_len = ft_strlen(e->cmdpaths[i]) + ft_strlen(e->input[i][0]);
+			ft_strlcat(e->cmdpaths[i], e->input[i][0], total_len + 1);
+			if (access(e->cmdpaths[i], X_OK))
 			{
-				printf("%s\n", e->cmdpath[i]);
-				break ;
+				free(e->cmdpaths[i]);
+				e->cmdpaths[i] = NULL;
 			}
+			else
+				break ;
 			j++;
 		}
-		j = 0;
 		i++;
 	}
-
 }

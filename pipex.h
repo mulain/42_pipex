@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/17 22:57:04 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/18 09:34:59 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ typedef struct envelope
 	char	**env;
 	char	***input;
 	char	**env_paths;
-	char	**cmdpath;
+	char	**cmdpaths;
 }	t_envl;
 
 //00_main.c
@@ -37,13 +37,16 @@ void	parse(t_envl *e, int argc, char **argv, char **env);
 void	split_input(t_envl *e);
 void	split_env_path(t_envl *e);
 void	get_cmdpaths(t_envl *e);
+int		get_singlepath(t_envl *e, int i);
 
 //08_errors.c
 void	error_pipe(void);
 void	error_fork(void);
+void	error_path(void);
 
 //09_helperfunctions.c
-void	print3darray(t_envl *e);
+void	print3d_input(t_envl *e);
+void	print2d(char **array);
 void	free3darray(int argc, char ***array);
 
 #endif
