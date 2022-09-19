@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 09:44:13 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 14:08:56 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,18 @@ void	error_fork(void)
 
 void	error_path(void)
 {
-	perror("Search command path");
+	perror("Command path");
+	exit(EXIT_FAILURE);
+}
+
+void	error_file1(void)
+{
+	perror("File1");
+	exit(EXIT_FAILURE);
+}
+
+void	error_file2(void)
+{
+	perror("File2");
 	exit(EXIT_FAILURE);
 }

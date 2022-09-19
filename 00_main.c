@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/18 23:19:45 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 14:02:36 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,20 +37,39 @@ leaks -atExit -- ./pipex file1 "string1 a b c" "string2 ab cd ef" "string3 knude
 */
 int	main(int argc, char **argv, char **env)
 {
-	// int		fd[2];
+	int			fd[2];
 	/* char		*array[3];
 	int			pid; */
+	pid_t		*pid;
 	t_envl		e;
+	int			i;
 
 	(void)env;
 	if (argc < 5)
 		return (write(2, "Too few arguments.\n", 19));
 	parse(&e, argc, argv, env);
+	
+	pid = malloc((argc - 3) * sizeof(pid_t));
+	if (pipe(fd) == -1)
+		error_pipe();
+	i = 0;
+
+	pid[i] = fork();
+	if (pid[i] == -1)
+		error_fork();
+	if (pid[i] == 0)
+	{
+		//run process 1
+		close(fd[0]); //close read end
+		execve(e.cmdpaths[i], e.input[i], env);
+		close(fd[1]);
+	}
+	close(fd[1]); //close write end on parent side
+	waitpid(pid[i], NULL, 0); //wait for child i
+
 	/* array[0] = "usr/bin/which";
 	array[1] = "ls";
 	array[2] = NULL; */
-	print2d(e.cmdpaths);
-	print3d(e.input);
 	/* pid = fork();
 	if (pid == -1)
 		error_fork();
@@ -58,8 +77,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		execve("/usr/bin/which", array, env);
 	} */
-	/* if (pipe(fd) == -1)
-		error_pipe();
+	/*
 	pid1 = fork();
 	if (pid1 == -1)
 		error_fork();
@@ -93,3 +111,21 @@ int	main(int argc, char **argv, char **env)
 	free2d(e.env_paths);
 	return (0);
 }
+
+/*
+while (i > argc - 3)
+	{
+		pid[i] = fork();
+		if (pid[i] == -1)
+			error_fork();
+		if (pid[i] == 0)
+		{
+			//run process 1
+			close(fd[0]); //close read end
+			execve(e.cmdpaths[i], e.input, env);
+			close(fd[1]);
+		}
+		close(fd[1]); //close write end on parent side
+		waitpid(pid[i], NULL, 0) //wait for child i
+
+*/
