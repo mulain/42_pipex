@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 16:57:53 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 22:10:27 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,18 @@ int dup2(int oldfd, int newfd);
 int	main(int argc, char **argv, char **env)
 {
 	t_envl		e;
-	int			i;
+	char		buffer[1000];
+	//int			i;
 
-	if (argc < 5)
-		return (write(2, "Too few arguments.\n", 19));
 	setup(&e, argc, argv, env);
+	open_files(&e);
 	if (pipe(e.pipe) == -1)
 		error_pipe();
 	firstchild(&e);
+	waitpid(e.pid[0], e.exitstatus, 0); //wait for child i NULL = dont care about status 0 = dont care about options
+	if (e.exitstatus)
+	
+	/* dup2(e.file1, e.pipe[1]);
 	i = 0;
 
 	pid[i] = fork();
@@ -60,10 +64,10 @@ int	main(int argc, char **argv, char **env)
 		close(fd[0]); //close read end
 		close(fd[1]);
 		execve(e.cmdpaths[i], e.input[i], env);
-	}
-	close(fd[1]); //close write end on parent side
-	waitpid(pid[i], NULL, 0); //wait for child i NULL = dont care about status 0 = dont care about options
-
+	} */
+	//[1]); //close write end on parent side
+	read(e.pipe[0], buffer, 1000);
+	printf("knudel:%s\n", buffer);
 	/* array[0] = "usr/bin/which";
 	array[1] = "ls";
 	array[2] = NULL; */

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 16:56:59 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 21:55:28 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,8 @@ void	firstchild(t_envl *e)
 		error_fork();
 	if (e->pid[0] == 0)
 	{
-		close(e->pipe[0]);
+		dup2(e->file1, STDIN_FILENO);
 		dup2(e->pipe[1], STDOUT_FILENO);
-		close(e->pipe[1]);
-		e->file1 = open(e->argv[1], O_RDONLY);
-		if (e->file1 == -1)
-			error_file1();
+		execve(e->cmdpaths[0], e->input[0], e->env);
 	}
 }

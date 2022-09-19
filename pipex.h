@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 15:37:42 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 22:13:49 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <sys/errno.h>
+# include <sys/wait.h>
 # include <string.h>
 
 typedef struct envelope
@@ -29,6 +30,7 @@ typedef struct envelope
 	char	**env_paths;
 	char	**cmdpaths;
 	int		pipe[2];
+	int		*exitstatus;
 	pid_t	*pid;
 	int		file1;
 	int		file2;
@@ -50,12 +52,16 @@ int		get_singlepath(t_envl *e, int i);
 //07_setup_2.c
 void	open_files(t_envl *e);
 
-//08_errors.c
+//08_errors_1.c
 void	error_pipe(void);
 void	error_fork(void);
 void	error_path(void);
 void	error_file1(void);
 void	error_file2(void);
+
+//08_errors_2.c
+void	error_argumentcount(void);
+void	error_cmdexecution(void);
 
 //09_helperfunctions.c
 void	print3d(char ***array);

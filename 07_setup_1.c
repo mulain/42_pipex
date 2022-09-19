@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 16:57:13 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 22:13:29 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	setup(t_envl *e, int argc, char **argv, char **env)
 {
+	if (argc < 5)
+		error_argumentcount();
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
@@ -21,7 +23,6 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	split_input(e);
 	split_env_path(e);
 	get_cmdpaths(e);
-	//open_files(e);
 }
 
 /*
