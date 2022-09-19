@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   01_parse.c                                         :+:      :+:    :+:   */
+/*   07_setup_1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 14:21:41 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 16:57:13 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	parse(t_envl *e, int argc, char **argv, char **env)
+void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
-	e->file1 = open(argv[1], O_RDONLY);
-	if (e->file1 == -1)
-		error_file1();
-	e->file2 = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0777);
-	if (e->file2 == -1)
-		error_file2();
+	e->pid = malloc((argc - 3) * sizeof(pid_t));
 	split_input(e);
 	split_env_path(e);
 	get_cmdpaths(e);
+	//open_files(e);
 }
 
 /*

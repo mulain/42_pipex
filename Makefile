@@ -6,7 +6,7 @@
 #    By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 17:11:14 by wmardin           #+#    #+#              #
-#    Updated: 2022/09/17 19:56:41 by wmardin          ###   ########.fr        #
+#    Updated: 2022/09/19 15:15:13 by wmardin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ CFLAGS = -Wall -Wextra -Werror
 
 NAME =	pipex
 SRC =	00_main.c\
-		01_parse.c\
+		01_children.c\
+		07_setup_1.c 07_setup_2.c\
 		08_errors.c\
 		09_helperfunctions.c
 

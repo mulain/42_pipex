@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 14:02:36 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 16:57:53 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,20 @@ Should behave like:
 < file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
 
 leaks -atExit -- ./pipex file1 "string1 a b c" "string2 ab cd ef" "string3 knudel hair shmudel" file2
+int dup(int oldfd);
+int dup2(int oldfd, int newfd);
 */
 int	main(int argc, char **argv, char **env)
 {
-	int			fd[2];
-	/* char		*array[3];
-	int			pid; */
-	pid_t		*pid;
 	t_envl		e;
 	int			i;
 
-	(void)env;
 	if (argc < 5)
 		return (write(2, "Too few arguments.\n", 19));
-	parse(&e, argc, argv, env);
-	
-	pid = malloc((argc - 3) * sizeof(pid_t));
-	if (pipe(fd) == -1)
+	setup(&e, argc, argv, env);
+	if (pipe(e.pipe) == -1)
 		error_pipe();
+	firstchild(&e);
 	i = 0;
 
 	pid[i] = fork();
@@ -60,12 +56,13 @@ int	main(int argc, char **argv, char **env)
 	if (pid[i] == 0)
 	{
 		//run process 1
+		dup2(fd[1], STDOUT_FILENO);
 		close(fd[0]); //close read end
-		execve(e.cmdpaths[i], e.input[i], env);
 		close(fd[1]);
+		execve(e.cmdpaths[i], e.input[i], env);
 	}
 	close(fd[1]); //close write end on parent side
-	waitpid(pid[i], NULL, 0); //wait for child i
+	waitpid(pid[i], NULL, 0); //wait for child i NULL = dont care about status 0 = dont care about options
 
 	/* array[0] = "usr/bin/which";
 	array[1] = "ls";
