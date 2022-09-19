@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 22:13:56 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 22:21:58 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	error_argumentcount(void)
 	exit(EXIT_FAILURE);
 }
 
-void	error_cmdexecution(void)
+void	error_waitpid(void)
 {
-	perror("Cmd execution");
+	perror("Waitpid");
 	exit(EXIT_FAILURE);
 }

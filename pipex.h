@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 22:13:49 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 22:40:32 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int		main(int argc, char **argv, char **env);
 
 //02_children.c
 void	firstchild(t_envl *e);
+void	middlechild(t_envl *e);
 
 //07_setup_1.c
 void	setup(t_envl *e, int argc, char **argv, char **env);
@@ -61,7 +62,7 @@ void	error_file2(void);
 
 //08_errors_2.c
 void	error_argumentcount(void);
-void	error_cmdexecution(void);
+void	error_waitpid(void);
 
 //09_helperfunctions.c
 void	print3d(char ***array);

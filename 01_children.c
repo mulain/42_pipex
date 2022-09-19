@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 21:55:28 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 23:02:56 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,24 @@ void	firstchild(t_envl *e)
 	if (e->pid[0] == 0)
 	{
 		dup2(e->file1, STDIN_FILENO);
+		close(e->file1);
 		dup2(e->pipe[1], STDOUT_FILENO);
+		close(e->pipe[1]);
 		execve(e->cmdpaths[0], e->input[0], e->env);
+	}
+}
+
+void	middlechild(t_envl *e)
+{
+	e->pid[1] = fork();
+	if (e->pid[1] == -1)
+		error_fork();
+	if (e->pid[1] == 0)
+	{
+		dup2(e->pipe[0], STDIN_FILENO);
+		close(e->pipe[0]);
+		dup2(e->pipe[1], STDOUT_FILENO);
+		close(e->pipe[1]);
+		execve(e->cmdpaths[1], e->input[1], e->env);
 	}
 }

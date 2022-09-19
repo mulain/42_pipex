@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 22:17:32 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/19 23:03:03 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,11 @@ int	main(int argc, char **argv, char **env)
 	if (pipe(e.pipe) == -1)
 		error_pipe();
 	firstchild(&e);
-	waitpid(e.pid[0], e.exitstatus, 0);
-	if (e.exitstatus)
-		error_cmdexecution();
+	if (waitpid(e.pid[0], e.exitstatus, 0) == -1)
+		error_waitpid();
+	middlechild(&e);
+	if (waitpid(e.pid[1], e.exitstatus, 0) == -1)
+		error_waitpid();
 
 	/* dup2(e.file1, e.pipe[1]);
 	i = 0;
@@ -69,6 +71,10 @@ int	main(int argc, char **argv, char **env)
 	//[1]); //close write end on parent side
 	read(e.pipe[0], buffer, 1000);
 	printf("knudel:%s\n", buffer);
+	close(e.file1);
+	close(e.file2);
+	close(e.pipe[0]);
+	close(e.pipe[1]);
 	/* array[0] = "usr/bin/which";
 	array[1] = "ls";
 	array[2] = NULL; */
