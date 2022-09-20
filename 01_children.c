@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/20 14:40:20 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/20 14:58:49 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,11 @@ void	firstchild(t_envl *e, int i)
 		execve(e->cmdpaths[0], e->input[0], e->env);
 	}
 	else
+	{
 		wait_child(e);
+		close(e->pipe[0][0]);
+		close(e->pipe[0][1]);
+	}
 }
 
 void	middlechild(t_envl *e, int i)

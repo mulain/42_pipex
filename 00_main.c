@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/20 14:36:26 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/20 14:58:08 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int	main(int argc, char **argv, char **env)
 	open_files(&e);
 	i = 0;
 	firstchild(&e, i);
+	
 	i++;
 	while (i < argc - 2)
 	{
