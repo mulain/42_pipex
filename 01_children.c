@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/20 14:58:49 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/20 16:05:56 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	firstchild(t_envl *e, int i)
 	else
 	{
 		wait_child(e);
-		close(e->pipe[0][0]);
+		//close(e->pipe[0][0]);
 		close(e->pipe[0][1]);
 	}
 }
@@ -78,7 +78,10 @@ void	middlechild(t_envl *e, int i)
 		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else
+	{
+		close(e->pipe[i - 1][0]);
 		wait_child(e);
+	}
 }
 
 /*
@@ -93,6 +96,7 @@ void	lastchild(t_envl *e, int i)
 		error_fork();
 	if (e->pid == 0)
 	{
+		printf("lastchild\n");
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
 		dup2(e->file2, STDOUT_FILENO);
 		//close(e->pipe[0]);
