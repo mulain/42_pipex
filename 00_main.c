@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 23:03:03 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/20 14:36:26 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,80 +40,42 @@ int dup2(int oldfd, int newfd);
 int	main(int argc, char **argv, char **env)
 {
 	t_envl		e;
-	char		buffer[1000];
-	//int			i;
+	//char		buffer[1000];
+	int			i;
+
+	//close opened pipes if later pipe fails oO
+	//printf("pipe 0 0:%i\n", e.pipe[0][0]);
+	//printf("pipe 0 1:%i\n", e.pipe[0][1]);
+
 
 	setup(&e, argc, argv, env);
 	open_files(&e);
-	if (pipe(e.pipe) == -1)
-		error_pipe();
-	firstchild(&e);
-	if (waitpid(e.pid[0], e.exitstatus, 0) == -1)
-		error_waitpid();
-	middlechild(&e);
-	if (waitpid(e.pid[1], e.exitstatus, 0) == -1)
-		error_waitpid();
-
-	/* dup2(e.file1, e.pipe[1]);
 	i = 0;
-
-	pid[i] = fork();
-	if (pid[i] == -1)
-		error_fork();
-	if (pid[i] == 0)
+	firstchild(&e, i);
+	i++;
+	while (i < argc - 2)
 	{
-		//run process 1
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[0]); //close read end
-		close(fd[1]);
-		execve(e.cmdpaths[i], e.input[i], env);
-	} */
-	//[1]); //close write end on parent side
-	read(e.pipe[0], buffer, 1000);
-	printf("knudel:%s\n", buffer);
+
+		middlechild(&e, i);
+		i++;
+	}
+
+
+
 	close(e.file1);
 	close(e.file2);
-	close(e.pipe[0]);
-	close(e.pipe[1]);
-	/* array[0] = "usr/bin/which";
-	array[1] = "ls";
-	array[2] = NULL; */
-	/* pid = fork();
-	if (pid == -1)
-		error_fork();
-	if (pid == 0)
-	{
-		execve("/usr/bin/which", array, env);
-	} */
-	/*
-	pid1 = fork();
-	if (pid1 == -1)
-		error_fork();
-	if (pid1 == 0)
-	{
-		printf("child\n");
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[0]);
-		close(fd[1]);
-		execve(argv[1], (char *const *)argv[2], NULL);
-	}
+	//close(e.pipe[0]);
+	//close(e.pipe[1]);
 
-	pid2 = fork();
-	if (pid2 == -1)
-		error_fork();
-	if (pid2 == 0)
-	{
-		printf("child2\n");
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		close(fd[1]);
-		execve(argv[4], (char *const *)argv[3], NULL);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	printf("%s\n", argv[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0); */
+	/* waitpid(e.pid[1], e.exitstatus, 0);
+	if (WIFEXITED(*e.exitstatus))
+		printf("Child 2 with PID %i exited successfully.\n", e.pid[1]);
+	else
+		error_waitpid(); */
+
+	//read(e.pipe[0], buffer, 1000);
+	//printf("knudel:%s\n", buffer);
+
 	free3d(e.input);
 	free2d(e.cmdpaths);
 	free2d(e.env_paths);

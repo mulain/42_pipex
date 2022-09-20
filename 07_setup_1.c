@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/19 22:13:29 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/20 13:53:17 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
-	e->pid = malloc((argc - 3) * sizeof(pid_t));
+	allocate_pipes(e);
+	//e->pid = malloc((argc - 3) * sizeof(pid_t));
 	split_input(e);
 	split_env_path(e);
 	get_cmdpaths(e);
