@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 19:01:49 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 20:37:59 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ leaks -atExit -- ./pipex file1 "string1 a b c" "string2 ab cd ef" "string3 knude
 int dup(int oldfd);
 int dup2(int oldfd, int newfd);
 */
+
+
 int	main(int argc, char **argv, char **env)
 {
 	t_envl		e;
 	int			i;
 
 	setup(&e, argc, argv, env);
-	open_files(&e);
 	i = 0;
 	firstchild(&e, i);
 	i++;
@@ -53,14 +54,6 @@ int	main(int argc, char **argv, char **env)
 		i++;
 	}
 	lastchild(&e, i);
-	free_mem(&e);
-
-
-	close(e.file1);
-	close(e.file2);
-	//close(e.pipe[0]);
-	//close(e.pipe[1]);
-
-
+	cleanup(&e);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 19:40:12 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 20:35:22 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	allocate_pipes(t_envl *e);
 void	open_files(t_envl *e);
 
 //07_shutdown.c
-void	shutdown(t_envl *e);
+void	cleanup(t_envl *e);
 void	free_mem(t_envl *e);
 void	free3d_char(char ***array);
 void	free2d_char(char **array);

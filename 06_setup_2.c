@@ -6,12 +6,21 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 19:41:32 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 20:44:11 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+Instead of making a pipe for each process, re-use old int array?
+Would need
+	int	pipe[2][2]
+and a reference for each 1d array:
+	int	*pipe_a (starts as pipe_a = pipe[0])
+	int *pipe_b	(starts as pipe_b = pipe[1])
+
+*/
 void	allocate_pipes(t_envl *e)
 {
 	int		i;

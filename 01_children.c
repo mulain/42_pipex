@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 19:43:27 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 21:09:22 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,18 @@ void	firstchild(t_envl *e, int i)
 		error_fork(e);
 	if (e->pid == 0)
 	{
-		ft_printf("firstchild i:%i\n", i);
-		dup2(e->file1, STDIN_FILENO);
-		dup2(e->pipe[i][1], STDOUT_FILENO);
-		close(e->file1);
 		close(e->pipe[i][0]);
+		dup2(e->file1, STDIN_FILENO);
+		close(e->file1);
+		dup2(e->pipe[i][1], STDOUT_FILENO);
 		close(e->pipe[i][1]);
-		execve(e->cmdpaths[0], e->input[0], e->env);
+		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else
 	{
 		wait_child(e);
-		close(e->pipe[0][1]);
+		close(e->file1);
+		close(e->pipe[i][1]);
 	}
 }
 
@@ -69,11 +69,10 @@ void	middlechild(t_envl *e, int i)
 		error_fork(e);
 	if (e->pid == 0)
 	{
-		ft_printf("middlechild i:%i\n", i);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
+		close(e->pipe[i - 1][0]);
 		dup2(e->pipe[i][1], STDOUT_FILENO);
-		//close(e->pipe[0]);
-		//close(e->pipe[1]);
+		close(e->pipe[i][1]);
 		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else
@@ -98,11 +97,10 @@ void	lastchild(t_envl *e, int i)
 		error_fork(e);
 	if (e->pid == 0)
 	{
-		ft_printf("lastchild i:%i\n", i);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
+		close(e->pipe[i - 1][0]);
 		dup2(e->file2, STDOUT_FILENO);
-		//close(e->pipe[0]);
-		//close(e->pipe[1]);
+		close(e->file2);
 		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else
@@ -110,14 +108,13 @@ void	lastchild(t_envl *e, int i)
 		close(e->pipe[i - 1][0]);
 		close(e->pipe[i][1]);
 		wait_child(e);
+		close(e->file2);
 	}
 }
 
 void	wait_child(t_envl *e)
 {
 	waitpid(e->pid, &e->exitstatus, 0);
-	if (WIFEXITED(e->exitstatus))
-		ft_printf("Child with PID %i exited successfully.\n", e->pid);
-	else
+	if (!WIFEXITED(e->exitstatus))
 		error_waitpid(e);
 }

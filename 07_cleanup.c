@@ -1,16 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   07_shutdown.c                                      :+:      :+:    :+:   */
+/*   07_cleanup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 17:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 19:33:33 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 21:04:34 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+/*
+cleanup serves as a gathering point for all necessary cleanup functions.
+Here, it is only one function, so it's kinda useless. Still kept it for
+overall structure.
+*/
+void	cleanup(t_envl *e)
+{
+	free_mem(e);
+}
 
 /*
 	allocate_pipes(e);
@@ -20,7 +30,8 @@
 
 	Probably possible to make one free function per dimension and pass
 	void pointer and size=sizeof(whateveristobefreed). Then instead of i++, use
-	i += size. Try out some time, but not now.
+	i += size. Would alsohave to end int array with NULL.
+	Try out some time, but not now.
 */
 void	free_mem(t_envl *e)
 {

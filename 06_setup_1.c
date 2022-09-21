@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 19:41:47 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 20:38:04 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6
 cmd_n		cmd_last		file2
 argv_n+1 	argv_argc-2		argv_argc-1
 argc_n+2
+
+Vars that will later be malloc'd are nulled to protect the free functions
+if shutdown occurs during an error and they haven't been malloc'd yet.
 */
 void	setup(t_envl *e, int argc, char **argv, char **env)
 {
@@ -33,6 +36,7 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
+	open_files(e);
 	allocate_pipes(e);
 	split_input(e);
 	split_env_path(e);

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 19:39:41 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 20:36:34 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ void	error_argumentcount(void)
 void	error_waitpid(t_envl *e)
 {
 	perror("waitpid");
-	shutdown(e);
+	cleanup(e);
 	exit(EXIT_FAILURE);
 }
