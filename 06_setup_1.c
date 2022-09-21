@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 17:38:57 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 19:41:47 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@ argc_n+2
 void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	if (argc < 5)
-		error_argumentcount(e);
+		error_argumentcount();
+	e->pipe = NULL;
+	e->input = NULL;
+	e->env_paths = NULL;
+	e->cmdpaths = NULL;
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
@@ -109,7 +113,7 @@ void	get_cmdpaths(t_envl *e)
 		if (get_singlepath(e, i))
 			i++;
 		else
-			error_path();
+			error_path(e);
 	}
 	e->cmdpaths[i] = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 17:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 17:44:28 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 19:33:33 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 */
 void	free_mem(t_envl *e)
 {
-	free2d_int(e->pipe);
+	free2d_int(e->pipe, e->argc - 3);
 	free3d_char(e->input);
 	free2d_char(e->env_paths);
 	free2d_char(e->cmdpaths);
@@ -35,6 +35,8 @@ void	free3d_char(char ***array)
 	int		i;
 	int		j;
 
+	if (!array)
+		return ;
 	i = 0;
 	j = 0;
 	while (array[j])
@@ -55,6 +57,8 @@ void	free2d_char(char **array)
 {
 	int		i;
 
+	if (!array)
+		return ;
 	i = 0;
 	while (array[i])
 	{
@@ -64,12 +68,14 @@ void	free2d_char(char **array)
 	free(array);
 }
 
-void	free2d_int(int **array)
+void	free2d_int(int **array, int size)
 {
 	int		i;
 
+	if (!array)
+		return ;
 	i = 0;
-	while (array[i])
+	while (i < size)
 	{
 		free(array[i]);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 17:33:24 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 19:01:49 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	main(int argc, char **argv, char **env)
 	t_envl		e;
 	int			i;
 
-	//close opened pipes if later pipe fails oO
 	setup(&e, argc, argv, env);
 	open_files(&e);
 	i = 0;

@@ -6,21 +6,21 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 17:38:33 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 19:39:41 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	error_argumentcount(void, t_envl *e)
+void	error_argumentcount(void)
 {
 	write(2, "Too few arguments.\n", 19);
-	free_mem(e);
 	exit(EXIT_FAILURE);
 }
 
-void	error_waitpid(void)
+void	error_waitpid(t_envl *e)
 {
 	perror("waitpid");
+	shutdown(e);
 	exit(EXIT_FAILURE);
 }

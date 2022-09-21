@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 17:42:45 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 19:40:12 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,22 @@ void	allocate_pipes(t_envl *e);
 void	open_files(t_envl *e);
 
 //07_shutdown.c
+void	shutdown(t_envl *e);
 void	free_mem(t_envl *e);
 void	free3d_char(char ***array);
 void	free2d_char(char **array);
-void	free2d_int(int **array);
+void	free2d_int(int **array, int size);
 
 //08_errors_1.c
-void	error_pipe(void);
-void	error_fork(void);
-void	error_path(void);
-void	error_file1(void);
-void	error_file2(void);
+void	error_pipe(t_envl *e);
+void	error_fork(t_envl *e);
+void	error_path(t_envl *e);
+void	error_file1(t_envl *e);
+void	error_file2(t_envl *e);
 
 //08_errors_2.c
-void	error_argumentcount(t_envl *e);
-void	error_waitpid(void);
+void	error_argumentcount(void);
+void	error_waitpid(t_envl *e);
 
 //09_helperfunctions.c
 void	print3d(char ***array);

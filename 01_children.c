@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 17:22:33 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 19:43:27 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ fildes2	Is the file descriptor that fildes is duplicated onto.
 void	firstchild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
-		error_pipe();
+		error_pipe(e);
 	e->pid = fork();
 	if (e->pid == -1)
-		error_fork();
+		error_fork(e);
 	if (e->pid == 0)
 	{
-		printf("firstchild i:%i\n", i);
+		ft_printf("firstchild i:%i\n", i);
 		dup2(e->file1, STDIN_FILENO);
 		dup2(e->pipe[i][1], STDOUT_FILENO);
 		close(e->file1);
@@ -56,7 +56,6 @@ void	firstchild(t_envl *e, int i)
 	else
 	{
 		wait_child(e);
-		//close(e->pipe[0][0]);
 		close(e->pipe[0][1]);
 	}
 }
@@ -64,13 +63,13 @@ void	firstchild(t_envl *e, int i)
 void	middlechild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
-		error_pipe();
+		error_pipe(e);
 	e->pid = fork();
 	if (e->pid == -1)
-		error_fork();
+		error_fork(e);
 	if (e->pid == 0)
 	{
-		printf("middlechild i:%i\n", i);
+		ft_printf("middlechild i:%i\n", i);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
 		dup2(e->pipe[i][1], STDOUT_FILENO);
 		//close(e->pipe[0]);
@@ -93,13 +92,13 @@ argc_n+2
 void	lastchild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
-		error_pipe();
+		error_pipe(e);
 	e->pid = fork();
 	if (e->pid == -1)
-		error_fork();
+		error_fork(e);
 	if (e->pid == 0)
 	{
-		printf("lastchild i:%i\n", i);
+		ft_printf("lastchild i:%i\n", i);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
 		dup2(e->file2, STDOUT_FILENO);
 		//close(e->pipe[0]);
@@ -118,7 +117,7 @@ void	wait_child(t_envl *e)
 {
 	waitpid(e->pid, &e->exitstatus, 0);
 	if (WIFEXITED(e->exitstatus))
-		printf("Child with PID %i exited successfully.\n", e->pid);
+		ft_printf("Child with PID %i exited successfully.\n", e->pid);
 	else
-		error_waitpid();
+		error_waitpid(e);
 }
