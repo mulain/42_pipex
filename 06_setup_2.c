@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 22:10:25 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 22:26:23 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	open_files(t_envl *e)
 	e->file1 = open(e->argv[1], O_RDONLY);
 	if (e->file1 == -1)
 		error_file1(e);
-	e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR | O_TRUNC, S_IRWXU);
+	e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (e->file2 == -1)
 		error_file2(e);
 }
