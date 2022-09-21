@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 20:35:22 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 22:16:26 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	error_fork(t_envl *e);
 void	error_path(t_envl *e);
 void	error_file1(t_envl *e);
 void	error_file2(t_envl *e);
+void	error_env(t_envl *e);
 
 //08_errors_2.c
 void	error_argumentcount(void);

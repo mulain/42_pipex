@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 21:37:26 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 22:20:44 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	split_input(t_envl *e)
 	using delimiter ':'. Result ist stored in e.path.
 -	If the resulting string doesn't end with "/", "/" is appended to create
 	a valid path format.
+	(In WSL2 on Win11 one path did already end with "/". Was a Windows path, but
+	who knows...)
 */
 void	split_env_path(t_envl *e)
 {
@@ -83,8 +85,12 @@ void	split_env_path(t_envl *e)
 	char	*temp;
 
 	i = 0;
-	while (ft_strncmp(e->env[i], "PATH=", 5))
+	if (!e->env)
+		error_env(e);
+	while (e->env[i] && ft_strncmp(e->env[i], "PATH=", 5))
 		i++;
+	if (!e->env[i])
+		error_env(e);
 	e->env_paths = ft_split(e->env[i] + 5, ':');
 	i = 0;
 	while (e->env_paths[i])
