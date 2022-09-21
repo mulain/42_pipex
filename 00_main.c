@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/20 15:53:50 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 17:21:01 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	main(int argc, char **argv, char **env)
 	firstchild(&e, i);
 
 	i++;
-	while (i < argc - 2)
+	while (i < argc - 4)
 	{
 		middlechild(&e, i);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/20 16:05:56 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 17:22:33 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	firstchild(t_envl *e, int i)
 		error_fork();
 	if (e->pid == 0)
 	{
-		printf("i:%i\n", i);
+		printf("firstchild i:%i\n", i);
 		dup2(e->file1, STDIN_FILENO);
 		dup2(e->pipe[i][1], STDOUT_FILENO);
 		close(e->file1);
@@ -70,7 +70,7 @@ void	middlechild(t_envl *e, int i)
 		error_fork();
 	if (e->pid == 0)
 	{
-		printf("i:%i\n", i);
+		printf("middlechild i:%i\n", i);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
 		dup2(e->pipe[i][1], STDOUT_FILENO);
 		//close(e->pipe[0]);
@@ -80,6 +80,7 @@ void	middlechild(t_envl *e, int i)
 	else
 	{
 		close(e->pipe[i - 1][0]);
+		close(e->pipe[i][1]);
 		wait_child(e);
 	}
 }
@@ -91,17 +92,25 @@ argc_n+2
 */
 void	lastchild(t_envl *e, int i)
 {
+	if (pipe(e->pipe[i]) == -1)
+		error_pipe();
 	e->pid = fork();
 	if (e->pid == -1)
 		error_fork();
 	if (e->pid == 0)
 	{
-		printf("lastchild\n");
+		printf("lastchild i:%i\n", i);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
 		dup2(e->file2, STDOUT_FILENO);
 		//close(e->pipe[0]);
 		//close(e->pipe[1]);
 		execve(e->cmdpaths[i], e->input[i], e->env);
+	}
+	else
+	{
+		close(e->pipe[i - 1][0]);
+		close(e->pipe[i][1]);
+		wait_child(e);
 	}
 }
 
