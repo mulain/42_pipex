@@ -6,12 +6,22 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/20 13:53:17 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 15:37:58 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/*
+Lookup table for numbers for the arguments from argv:
+input:			pipex	file1	cmd_1	cmd_2	cmd_3	file2
+index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5
+argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6
+
+cmd_n		cmd_last		file2
+argv_n+1 	argv_argc-2		argv_argc-1
+argc_n+2
+*/
 void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	if (argc < 5)
@@ -28,18 +38,9 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 
 /*
 Returns a 3d array with the split up commands.
-Array level 3: Array of the command string "sentences".
-Array level 2: Array of the words from each commmand (single sentence).
-Array level 1: Array of the chars from each word (single words).
-
-Figuring out the correct numbers for the arguments from argv:
-input:			pipex	file1	cmd_1	cmd_2	cmd_3	file2
-index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5
-argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6
-
-cmd_n		cmd_last		file2
-argv_n+1 	argv_argc-2		argv_argc-1
-argc_n+2
+Array level 3: All command string "sentences" (paragraph I guess?).
+Array level 2: All words from each commmand (single sentence).
+Array level 1: All chars from each word (single words).
 
 malloc n = argc - 2 because:
 -1 for program name
