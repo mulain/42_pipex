@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 20:44:11 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 21:44:04 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,22 @@ Would need
 and a reference for each 1d array:
 	int	*pipe_a (starts as pipe_a = pipe[0])
 	int *pipe_b	(starts as pipe_b = pipe[1])
+then switch between pipe_a and pipe_b...
+Meh...
 
+number of pipes is n = argc - 4 because:
+-1 for program name
+-1 for file 1
+-1 for last child
+-1 for file 2
 */
 void	allocate_pipes(t_envl *e)
 {
 	int		i;
 
 	i = 0;
-	e->pipe = malloc((e->argc - 3) * sizeof(int *));
-	while (i < e->argc - 3)
+	e->pipe = malloc((e->argc - 4) * sizeof(int *));
+	while (i < e->argc - 4)
 	{
 		e->pipe[i] = malloc(2 * sizeof(int));
 		i++;

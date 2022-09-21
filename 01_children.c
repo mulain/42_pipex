@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 21:09:22 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/21 21:26:41 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ void	middlechild(t_envl *e, int i)
 	}
 	else
 	{
+		wait_child(e);
 		close(e->pipe[i - 1][0]);
 		close(e->pipe[i][1]);
-		wait_child(e);
 	}
 }
 
@@ -87,11 +87,11 @@ void	middlechild(t_envl *e, int i)
 cmd_n		cmd_last		file2
 argv_n+1 	argv_argc-2		argv_argc-1
 argc_n+2
+Last child doesn't need to make another pipe:
+reads from previous child's read end and writes to file2.
 */
 void	lastchild(t_envl *e, int i)
 {
-	if (pipe(e->pipe[i]) == -1)
-		error_pipe(e);
 	e->pid = fork();
 	if (e->pid == -1)
 		error_fork(e);
@@ -105,9 +105,8 @@ void	lastchild(t_envl *e, int i)
 	}
 	else
 	{
-		close(e->pipe[i - 1][0]);
-		close(e->pipe[i][1]);
 		wait_child(e);
+		close(e->pipe[i - 1][0]);
 		close(e->file2);
 	}
 }
