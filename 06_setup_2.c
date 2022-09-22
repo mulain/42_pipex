@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/22 11:11:53 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/22 11:16:33 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,12 @@ Meh...
 number of pipes is n = argc - 4 because:
 -1 for program name
 -1 for file 1
+-1 for last child
+-1 for file 2
+If using here_doc, there will be one pipe more than is needed:
+-1 for program name
+-1 for here_doc
+-1 for delimiter
 -1 for last child
 -1 for file 2
 */

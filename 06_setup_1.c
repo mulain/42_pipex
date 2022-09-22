@@ -6,14 +6,16 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/22 10:53:24 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/22 11:38:07 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /*
-Lookup table for numbers for the arguments from argv:
+***************************************************************************
+Lookup table for numbers for the arguments from argv:*****
+---No here_doc---
 input:			pipex	file1	cmd_1	cmd_2	cmd_3	file2
 index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5
 argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6
@@ -22,6 +24,11 @@ cmd_n		cmd_last		file2
 argv_n+1 	argv_argc-2		argv_argc-1
 argc_n+2
 
+---Yes here_doc---
+input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	file2
+index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5	argv_6
+argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6	argc_7
+***************************************************************************
 Vars that will later be malloc'd are nulled to protect the free functions
 if shutdown occurs during an error and they haven't been malloc'd yet.
 */
@@ -29,7 +36,7 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	if (argc < 5)
 		error_argumentcount();
-	if (ft_strncmp(argv[1], "here_doc", 9))
+	if (!ft_strncmp(argv[1], "here_doc", 9))
 		e->here_doc = 1;
 	else
 		e->here_doc = 0;
@@ -49,28 +56,46 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 
 /*
 Returns a 3d array with the split up commands.
-Array level 3: All command string "sentences" (paragraph I guess?).
+Array level 3: All command string "sentences" (text).
 Array level 2: All words from each commmand (single sentence).
 Array level 1: All chars from each word (single words).
 
-malloc n = argc - 2 because:
+No here_doc:
+malloc argc - n; n = 2 because:
 -1 for program name
 -1 for file 1
 -1 for file 2
 +1 for NULL
+We want to skip the first 2 entries (i = n = 2) and the last (i < argc-1):
+they are not execve commands.
+
+Yes here_doc:
+malloc argc - n; n = 3 because:
+-1 for program name
+-1 for here_doc
+-1 for delimiter
+-1 for file 2
++1 for NULL
+We want to skip the first 3 entries (i = n = 3) and the last (i < argc-1):
+they are not execve commands.
 */
 void	split_input(t_envl *e)
 {
 	int		i;
+	int		n;
 
-	e->input = malloc((e->argc - 2) * sizeof(char **));
-	i = 2;
+	if (e->here_doc)
+		n = 3;
+	else
+		n = 2;
+	e->input = malloc((e->argc - n) * sizeof(char **));
+	i = n;
 	while (i < e->argc - 1)
 	{
-		e->input[i - 2] = ft_split(e->argv[i], ' ');
+		e->input[i - n] = ft_split(e->argv[i], ' ');
 		i++;
 	}
-	e->input[i - 2] = NULL;
+	e->input[i - n] = NULL;
 }
 
 /*
@@ -115,6 +140,11 @@ Iterates through the received commands.
 Calls get_singlepath for each command to find the correct path / test if
 there is a path. If no path is found, exits. If a path is found, get_singlepath
 writes it to the struct. Ends with assigning a NULL pointer.
+malloc n = argc - 2 because:
+-1 for program name
+-1 for file 1
+-1 for file 2
++1 for NULL
 */
 void	get_cmdpaths(t_envl *e)
 {
