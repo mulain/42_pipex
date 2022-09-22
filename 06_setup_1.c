@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 22:20:44 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/22 10:53:24 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	if (argc < 5)
 		error_argumentcount();
+	if (ft_strncmp(argv[1], "here_doc", 9))
+		e->here_doc = 1;
+	else
+		e->here_doc = 0;
 	e->pipe = NULL;
 	e->input = NULL;
 	e->env_paths = NULL;

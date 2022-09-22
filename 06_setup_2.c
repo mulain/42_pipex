@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 22:26:23 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/22 11:11:53 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,38 @@ void	allocate_pipes(t_envl *e)
 	}
 }
 
+/*
+chmod 0644 -> user has read / write (4 + 2 + 0)
+others only have read (4 + 0 + 0)
+
+If using here_doc:
+- opens (i.e. creates) a temporary file instead of opening file1.
+- Uses getnextline to read until a delimiter is encountered
+- opens file 2 in create read/write and append(!) mode.
+(please note the decimal use to save a space and please the norm: 0644 = 420)
+
+No here_doc:
+- opens file 1 (argv[1]) in read only mode in fd e.file1
+- opens file 2 (argv[argc-1]) in create read/write and truncate mode.
+*/
 void	open_files(t_envl *e)
 {
-	e->file1 = open(e->argv[1], O_RDONLY);
-	if (e->file1 == -1)
-		error_file1(e);
-	e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (e->file2 == -1)
-		error_file2(e);
+	if (e->here_doc)
+	{
+		e->file1 = open("here_doc_tempfile", O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (e->file1 == -1)
+			error_file1(e);
+		e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR | O_APPEND, 420);
+		if (e->file2 == -1)
+			error_file2(e);
+	}
+	else
+	{
+		e->file1 = open(e->argv[1], O_RDONLY);
+		if (e->file1 == -1)
+			error_file1(e);
+		e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (e->file2 == -1)
+			error_file2(e);
+	}
 }
