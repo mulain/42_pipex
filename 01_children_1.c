@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 18:04:05 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 18:13:01 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void	middlechild(t_envl *e, int i)
 /*
 Last child doesn't need to make another pipe:
 reads from previous child's read end and writes to file2.
+chmod 0644 -> user has read / write (4 + 2 + 0)
+others only have read (4 + 0 + 0)
 */
 void	lastchild(t_envl *e, int i)
 {
@@ -95,7 +97,12 @@ void	lastchild(t_envl *e, int i)
 		error_fork(e);
 	if (e->pid == 0)
 	{
-		e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (e->here_doc)
+			e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
+					| O_APPEND, 0644);
+		else
+			e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
+					| O_TRUNC, 0644);
 		if (e->file2 == -1)
 			error_file2(e);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);

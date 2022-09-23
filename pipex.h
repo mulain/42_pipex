@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 10:27:36 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 19:47:07 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct envelope
 }	t_envl;
 
 //00_main.c
-int		main(int argc, char **argv, char **env);
+//int		main(int argc, char **argv, char **env);
 
 //01_children_1.c
 void	firstchild(t_envl *e, int i);
@@ -78,6 +78,7 @@ void	error_env(t_envl *e);
 
 //08_errors_2.c
 void	error_argumentcount(void);
+void	error_here_doc_tempfile(t_envl *e);
 void	error_waitpid(t_envl *e);
 
 //09_helperfunctions.c

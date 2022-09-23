@@ -32,7 +32,7 @@ char	*ft_appendbuffertoline(char *line, char *readbuffer, int readreturn)
 	readbuffer[readreturn] = 0;
 	len_readbuffer = ft_strlen_gnl(readbuffer);
 	if (!line)
-		return (ft_strdup(readbuffer));
+		return (ft_strdup_gnl(readbuffer));
 	len_line = ft_strlen_gnl(line);
 	output = malloc((len_line + len_readbuffer + 1) * sizeof(char));
 	while (line[i])
@@ -80,7 +80,7 @@ int	ft_findnewline(const char *line)
 	- strdup beginning with the position after the first \n
 		in line.
 - 0 terminates line after the first \n
-- this means line is bigger than the contained string but I didn't want to 
+- this means line is bigger than the contained string but I didn't want to
 	make a new malloc and free the old line.
 */
 
@@ -97,12 +97,12 @@ char	*ft_makeremainder_returnoutput(char *line, char **remainder, int fd)
 		remainder[fd] = NULL;
 		return (line);
 	}
-	remainder[fd] = ft_strdup(line + ind_newline + 1);
+	remainder[fd] = ft_strdup_gnl(line + ind_newline + 1);
 	line[ind_newline + 1] = 0;
 	return (line);
 }
 
-char	*ft_strdup(const char *source)
+char	*ft_strdup_gnl(const char *source)
 {
 	int		i;
 	char	*output;
