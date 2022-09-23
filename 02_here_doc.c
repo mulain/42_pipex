@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 20:31:35 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 20:36:33 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 21:41:59 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,5 @@ void	here_doc(t_envl *e)
 		write(e->file1, line, ft_strlen(line));
 		line = get_next_line(STDIN_FILENO);
 	}
+	close(e->file1);
 }
