@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wmardin <wmardin@student.42wolfsburg.de    +#+  +:+       +#+        */
+/*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 21:46:37 by wmardin           #+#    #+#             */
-/*   Updated: 2022/05/31 15:12:29 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 20:47:41 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ Structure
 	-	If we did read, the while loop keeps running.
 	-	If there was no \n and there was nothing left to read (while loop
 		terminates), we still have to output the remaining content of line.
-			
+
 */
 
 char	*get_next_line(int fd)
@@ -72,7 +72,7 @@ char	*get_next_line(int fd)
 	line = NULL;
 	if (remainder[fd])
 	{
-		line = ft_strdup(remainder[fd]);
+		line = ft_strdup_gnl(remainder[fd]);
 		free(remainder[fd]);
 		remainder[fd] = NULL;
 		if (ft_findnewline(line) != -1)
