@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 18:03:46 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 18:04:05 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	middlechild(t_envl *e, int i)
 }
 
 /*
-ASDasd
 Last child doesn't need to make another pipe:
 reads from previous child's read end and writes to file2.
 */
