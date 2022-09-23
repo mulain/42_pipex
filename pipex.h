@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 19:47:07 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 20:34:22 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ void	lastchild(t_envl *e, int i);
 void	firstchild_standard(t_envl *e, int i);
 void	firstchild_heredoc(t_envl *e, int i);
 void	wait_child(t_envl *e);
+
+//02_here_doc.c
+void	here_doc(t_envl *e);
 
 //06_setup_1.c
 void	setup(t_envl *e, int argc, char **argv, char **env);

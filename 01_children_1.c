@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 18:13:01 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 20:40:13 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,18 @@ void	firstchild(t_envl *e, int i)
 		error_fork(e);
 	if (e->pid == 0)
 	{
-		if (!e->here_doc)
-			firstchild_standard(e, i);
-		firstchild_heredoc(e, i);
+		e->file1 = open(e->argv[1], O_RDONLY);
+		if (e->file1 == -1)
+			error_file1(e);
+		close(e->pipe[i][0]);
+		dup2(e->file1, STDIN_FILENO);
+		close(e->file1);
+		dup2(e->pipe[i][1], STDOUT_FILENO);
+		close(e->pipe[i][1]);
+		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else
 	{
-		ft_printf("firstchild\n");
 		wait_child(e);
 		close(e->pipe[i][1]);
 	}

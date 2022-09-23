@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/22 11:59:13 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 20:36:04 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ int	main(int argc, char **argv, char **env)
 	int			i;
 
 	setup(&e, argc, argv, env);
+	if (e.here_doc)
+	{
+		here_doc(&e);
+		i = 0;
+	}
 	i = 0;
 	firstchild(&e, i);
 	i++;
