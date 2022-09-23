@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 21:26:34 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 21:32:00 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,4 +123,12 @@ void	lastchild(t_envl *e, int i)
 		wait_child(e);
 		close(e->pipe[i - 1][0]);
 	}
+}
+
+void	wait_child(t_envl *e)
+{
+	waitpid(e->pid, &e->exitstatus, 0);
+	if (!WIFEXITED(e->exitstatus))
+		error_waitpid(e);
+	ft_printf("Child with PID %i exited.\n", e->pid);
 }

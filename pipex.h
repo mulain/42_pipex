@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 20:34:22 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 21:32:22 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,6 @@ typedef struct envelope
 void	firstchild(t_envl *e, int i);
 void	middlechild(t_envl *e, int i);
 void	lastchild(t_envl *e, int i);
-
-//01_children_2.c
-void	firstchild_standard(t_envl *e, int i);
-void	firstchild_heredoc(t_envl *e, int i);
 void	wait_child(t_envl *e);
 
 //02_here_doc.c
