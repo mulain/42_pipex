@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/22 11:53:31 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 18:00:02 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
-	open_files(e);
 	allocate_pipes(e);
 	split_input_cmds(e);
 	split_env_path(e);
@@ -179,6 +178,7 @@ void	get_cmdpaths(t_envl *e)
 Returns 1 if a valid path for the command of index i was found, 0 if not.
 Joins env_paths[n] to the command until a valid command path is found or no
 more paths exist to try.
+-	first checks if full cmd path was entered (i.e /usr/bin/ls)
 -	uses access to determine if file exists and has exec rights
 	-	if access != 0:
 		-	frees and nulls
@@ -192,6 +192,11 @@ int	get_singlepath(t_envl *e, int i)
 {
 	int		j;
 
+	if (!access(e->input[i][0], X_OK))
+	{
+		e->cmdpaths[i] = ft_strdup(e->input[i][0]);
+		return (1);
+	}
 	j = 0;
 	e->cmdpaths[i] = NULL;
 	while (e->env_paths[j] && !e->cmdpaths[i])
