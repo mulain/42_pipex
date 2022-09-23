@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 21:48:45 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 22:13:10 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	firstchild(t_envl *e, int i)
 		close(e->file1);
 		dup2(e->pipe[i][1], STDOUT_FILENO);
 		close(e->pipe[i][1]);
-		printf("e.cmdpath.i:%s\n", e->cmdpaths[i]);
+		write(1, e->cmdpaths[i], 100);
 		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else
