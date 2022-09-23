@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 20:40:13 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 21:26:34 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,17 @@ void	firstchild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
 		error_pipe(e);
-	printpipefd(e->pipe[i], i);
 	e->pid = fork();
 	if (e->pid == -1)
 		error_fork(e);
 	if (e->pid == 0)
 	{
-		e->file1 = open(e->argv[1], O_RDONLY);
-		if (e->file1 == -1)
-			error_file1(e);
+		if (!e->here_doc)
+		{
+			e->file1 = open(e->argv[1], O_RDONLY);
+			if (e->file1 == -1)
+				error_file1(e);
+		}
 		close(e->pipe[i][0]);
 		dup2(e->file1, STDIN_FILENO);
 		close(e->file1);
@@ -68,7 +70,6 @@ void	middlechild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
 		error_pipe(e);
-	printpipefd(e->pipe[i], i);
 	e->pid = fork();
 	if (e->pid == -1)
 		error_fork(e);
