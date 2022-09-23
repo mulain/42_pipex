@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/22 11:38:07 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/22 11:53:31 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	e->env = env;
 	open_files(e);
 	allocate_pipes(e);
-	split_input(e);
+	split_input_cmds(e);
 	split_env_path(e);
 	get_cmdpaths(e);
 }
@@ -79,7 +79,7 @@ malloc argc - n; n = 3 because:
 We want to skip the first 3 entries (i = n = 3) and the last (i < argc-1):
 they are not execve commands.
 */
-void	split_input(t_envl *e)
+void	split_input_cmds(t_envl *e)
 {
 	int		i;
 	int		n;
@@ -140,9 +140,19 @@ Iterates through the received commands.
 Calls get_singlepath for each command to find the correct path / test if
 there is a path. If no path is found, exits. If a path is found, get_singlepath
 writes it to the struct. Ends with assigning a NULL pointer.
-malloc n = argc - 2 because:
+
+No here_doc:
+malloc argc - n; n = 2 because:
 -1 for program name
 -1 for file 1
+-1 for file 2
++1 for NULL
+
+Yes here_doc:
+malloc argc - n; n = 3 because:
+-1 for program name
+-1 for here_doc
+-1 for delimiter
 -1 for file 2
 +1 for NULL
 */
@@ -150,7 +160,10 @@ void	get_cmdpaths(t_envl *e)
 {
 	int		i;
 
-	e->cmdpaths = malloc((e->argc - 2) * sizeof(char *));
+	if (e->here_doc)
+		e->cmdpaths = malloc((e->argc - 3) * sizeof(char *));
+	else
+		e->cmdpaths = malloc((e->argc - 2) * sizeof(char *));
 	i = 0;
 	while (e->input[i])
 	{

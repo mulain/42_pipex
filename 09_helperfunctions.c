@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 19:50:17 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 17:34:17 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 10:27:41 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,11 @@ void	print2d(char **array)
 		ft_printf("%s\n", array[i]);
 		i++;
 	}
+}
+
+void	printpipefd(int	*pipe, int i)
+{
+	ft_printf("---pipe i: %i---\n", i);
+	ft_printf("fd[0]: %i\n", pipe[0]);
+	ft_printf("fd[1]: %i\n", pipe[1]);
 }

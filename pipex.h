@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/22 10:53:26 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 10:27:36 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,19 @@ typedef struct envelope
 //00_main.c
 int		main(int argc, char **argv, char **env);
 
-//01_children.c
+//01_children_1.c
 void	firstchild(t_envl *e, int i);
 void	middlechild(t_envl *e, int i);
 void	lastchild(t_envl *e, int i);
+
+//01_children_2.c
+void	firstchild_standard(t_envl *e, int i);
+void	firstchild_heredoc(t_envl *e, int i);
 void	wait_child(t_envl *e);
 
 //06_setup_1.c
 void	setup(t_envl *e, int argc, char **argv, char **env);
-void	split_input(t_envl *e);
+void	split_input_cmds(t_envl *e);
 void	split_env_path(t_envl *e);
 void	get_cmdpaths(t_envl *e);
 int		get_singlepath(t_envl *e, int i);
@@ -79,5 +83,6 @@ void	error_waitpid(t_envl *e);
 //09_helperfunctions.c
 void	print3d(char ***array);
 void	print2d(char **array);
+void	printpipefd(int	*pipe, int i);
 
 #endif

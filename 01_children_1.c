@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   01_children.c                                      :+:      :+:    :+:   */
+/*   01_children_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 21:26:41 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 10:37:30 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,26 @@ fid = dup2(fildes, fildes2);
 PARAMETERS
 fildes	Is the file descriptor to duplicate.
 fildes2	Is the file descriptor that fildes is duplicated onto.
+No "else" needed after firstchild_standard because execve is called.
 */
 void	firstchild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
 		error_pipe(e);
+	printpipefd(e->pipe[i], i);
 	e->pid = fork();
 	if (e->pid == -1)
 		error_fork(e);
 	if (e->pid == 0)
 	{
-		close(e->pipe[i][0]);
-		dup2(e->file1, STDIN_FILENO);
-		close(e->file1);
-		dup2(e->pipe[i][1], STDOUT_FILENO);
-		close(e->pipe[i][1]);
-		execve(e->cmdpaths[i], e->input[i], e->env);
+		if (!e->here_doc)
+			firstchild_standard(e, i);
+		firstchild_heredoc(e, i);
 	}
 	else
 	{
+		ft_printf("firstchild\n");
 		wait_child(e);
-		close(e->file1);
 		close(e->pipe[i][1]);
 	}
 }
@@ -64,6 +63,7 @@ void	middlechild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
 		error_pipe(e);
+	printpipefd(e->pipe[i], i);
 	e->pid = fork();
 	if (e->pid == -1)
 		error_fork(e);
@@ -77,6 +77,7 @@ void	middlechild(t_envl *e, int i)
 	}
 	else
 	{
+		ft_printf("middlechild\n");
 		wait_child(e);
 		close(e->pipe[i - 1][0]);
 		close(e->pipe[i][1]);
@@ -84,9 +85,6 @@ void	middlechild(t_envl *e, int i)
 }
 
 /*
-cmd_n		cmd_last		file2
-argv_n+1 	argv_argc-2		argv_argc-1
-argc_n+2
 Last child doesn't need to make another pipe:
 reads from previous child's read end and writes to file2.
 */
@@ -97,6 +95,9 @@ void	lastchild(t_envl *e, int i)
 		error_fork(e);
 	if (e->pid == 0)
 	{
+		e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (e->file2 == -1)
+			error_file2(e);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
 		close(e->pipe[i - 1][0]);
 		dup2(e->file2, STDOUT_FILENO);
@@ -105,15 +106,8 @@ void	lastchild(t_envl *e, int i)
 	}
 	else
 	{
+		ft_printf("lastchild\n");
 		wait_child(e);
 		close(e->pipe[i - 1][0]);
-		close(e->file2);
 	}
-}
-
-void	wait_child(t_envl *e)
-{
-	waitpid(e->pid, &e->exitstatus, 0);
-	if (!WIFEXITED(e->exitstatus))
-		error_waitpid(e);
 }

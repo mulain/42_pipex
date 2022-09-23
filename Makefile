@@ -6,16 +6,17 @@
 #    By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 17:11:14 by wmardin           #+#    #+#              #
-#    Updated: 2022/09/21 20:35:15 by wmardin          ###   ########.fr        #
+#    Updated: 2022/09/22 17:09:49 by wmardin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
+DEFINE =
 
 NAME =	pipex
 SRC =	00_main.c\
-		01_children.c\
+		01_children_1.c 01_children_2.c\
 		06_setup_1.c 06_setup_2.c\
 		07_cleanup.c\
 		08_errors_1.c 08_errors_2.c\
@@ -29,7 +30,7 @@ COLOR_END = \033[0m
 LIBFT = libft/libft.a
 
 $(NAME): $(LIBFT)
-	@$(CC) $(CFLAGS) $(SRC) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(SRC) $(LIBFT) $(DEFINE) -o $(NAME)
 	@echo "$(BLUE)$(NAME) created."
 
 $(LIBFT):
@@ -48,7 +49,7 @@ fclean: clean
 re: fclean all
 
 noflag:
-	@$(CC) $(SRC) $(LIBFT) -o $(NAME)
+	@$(CC) $(SRC) $(LIBFT) $(DEFINE) -o $(NAME)
 	@echo "$(BLUE)$(NAME) created w/o error flags."
 
 test:

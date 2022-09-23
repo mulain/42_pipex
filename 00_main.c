@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 20:37:59 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/22 11:59:13 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,10 @@ $> ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
 Should behave like:
 < file1 cmd1 | cmd2 | cmd3 ... | cmdn > file2
 
-leaks -atExit -- ./pipex file1 "string1 a b c" "string2 ab cd ef" "string3 knudel hair shmudel" file2
+leaks -atExit -- ./pipex file1 "cmd1" "cmd2" file2
 int dup(int oldfd);
 int dup2(int oldfd, int newfd);
 */
-
-
 int	main(int argc, char **argv, char **env)
 {
 	t_envl		e;
