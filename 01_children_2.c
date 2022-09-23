@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 20:02:42 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/23 20:10:39 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	firstchild_heredoc(t_envl *e, int i)
 	line = get_next_line(STDIN_FILENO);
 	while (line)
 	{
-		if (!ft_strncmp(line, e->argv[2], ft_strlen(e->argv[2] + 1)))
+		if (!ft_strncmp(line, e->argv[2], ft_strlen(e->argv[2])))
 		{
 			printf("limiter found %i\n %i\n", ft_strncmp(line, e->argv[2], ft_strlen(e->argv[2] + 1)), i);
 			printf("strlenLimiter:%li\n", ft_strlen(e->argv[2]));
