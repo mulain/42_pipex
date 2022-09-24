@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 10:10:59 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 12:00:08 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,56 +37,12 @@ If using here_doc, argc - n; n= 5 because:
 void	allocate_pipes(t_envl *e)
 {
 	int		i;
-	//int		n;
 
-	/* if (e->here_doc)
-		n = 5;
-	else
-		n = 4;
-	e->pipe = malloc((e->argc - n) * sizeof(int *)); */
 	e->pipe = malloc((e->argc - e->n) * sizeof(int *));
 	i = 0;
 	while (i < e->argc - e->n)
 	{
 		e->pipe[i] = malloc(2 * sizeof(int));
 		i++;
-	}
-}
-
-/*
-chmod 0644 -> user has read / write (4 + 2 + 0)
-others only have read (4 + 0 + 0)
-
-If using here_doc:
--	opens (i.e. creates) a temporary file instead of opening infile
--	Uses getnextline to read until a delimiter is encountered
--	opens file 2 in create read/write and append(!) mode
-	decimal used to save a space because of the norm (line length) (0644 = 420)
-
-No here_doc:
--	opens infile (argv[1]) in read only mode in fd e.infile
--	opens outfile (argv[argc-1]) in create read/write and truncate mode
-*/
-void	open_files(t_envl *e)
-{
-	if (e->here_doc)
-	{
-		e->infile = open("here_doc_tempfile", O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if (e->infile == -1)
-			error_infile(e);
-		e->outfile = open(e->argv[e->argc - 1],
-				O_CREAT | O_RDWR | O_APPEND, 420);
-		if (e->outfile == -1)
-			error_outfile(e);
-	}
-	else
-	{
-		e->infile = open(e->argv[1], O_RDONLY);
-		if (e->infile == -1)
-			error_infile(e);
-		e->outfile = open(e->argv[e->argc - 1],
-				O_CREAT | O_RDWR | O_TRUNC, 0644);
-		if (e->outfile == -1)
-			error_outfile(e);
 	}
 }

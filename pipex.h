@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 10:04:03 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 11:53:22 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct envelope
 	char	**cmdpaths;
 	int		**pipe;
 	int		here_doc;
+	char	*tempfile;
 	int		n;
 	int		exitstatus;
 	pid_t	pid;

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 17:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 10:00:20 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 11:57:00 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 cleanup serves as a gathering point for all necessary cleanup functions.
 Here, it is only one function, so it's kinda useless. Still kept it for
 overall structure.
+Actually ended up adding unlink, so yeah.
 */
 void	cleanup(t_envl *e)
 {
 	free_mem(e);
+	unlink(e->tempfile);
 }
 
 /*

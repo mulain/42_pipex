@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 20:31:35 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 10:23:04 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 11:54:43 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	here_doc(t_envl *e)
 {
 	char	*line;
 
-	e->infile = open("here_doc_tempfile", O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	e->infile = open(e->tempfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (e->infile == -1)
 		error_here_doc_tempfile(e);
 	line = get_next_line(STDIN_FILENO);

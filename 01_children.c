@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 09:49:18 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 11:56:01 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	firstchild(t_envl *e, int i)
 	if (e->pid == 0)
 	{
 		if (e->here_doc)
-			e->infile = open("here_doc_tempfile", O_RDONLY);
+			e->infile = open(e->tempfile, O_RDONLY);
 		else
 			e->infile = open(e->argv[1], O_RDONLY);
 		if (e->infile == -1)
@@ -84,7 +84,6 @@ void	middlechild(t_envl *e, int i)
 	}
 	else
 	{
-		ft_printf("middlechild\n");
 		wait_child(e);
 		close(e->pipe[i - 1][0]);
 		close(e->pipe[i][1]);
@@ -120,7 +119,6 @@ void	lastchild(t_envl *e, int i)
 	}
 	else
 	{
-		ft_printf("lastchild\n");
 		wait_child(e);
 		close(e->pipe[i - 1][0]);
 	}

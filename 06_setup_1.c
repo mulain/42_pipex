@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 10:09:04 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 11:54:01 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	if (!ft_strncmp(argv[1], "here_doc", 9))
 	{
 		e->here_doc = 1;
+		e->tempfile = "here_doc_tempfile";
 		e->n = 5;
 	}
 	else
