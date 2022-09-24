@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 17:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 11:57:00 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 12:34:18 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ Actually ended up adding unlink, so yeah.
 void	cleanup(t_envl *e)
 {
 	free_mem(e);
-	unlink(e->tempfile);
+	if (e->here_doc && !access(e->tempfile, F_OK))
+		unlink(e->tempfile);
 }
 
 /*
@@ -37,10 +38,7 @@ void	cleanup(t_envl *e)
 */
 void	free_mem(t_envl *e)
 {
-	if (e->here_doc)
-		free2d_int(e->pipe, e->argc - 5);
-	else
-		free2d_int(e->pipe, e->argc - 4);
+	free2d_int(e->pipe, e->argc - e->n);
 	free3d_char(e->input);
 	free2d_char(e->env_paths);
 	free2d_char(e->cmdpaths);

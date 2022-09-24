@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 11:56:01 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 12:26:46 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,12 @@ void	firstchild(t_envl *e, int i)
 		error_fork(e);
 	if (e->pid == 0)
 	{
-		if (e->here_doc)
-			e->infile = open(e->tempfile, O_RDONLY);
-		else
-			e->infile = open(e->argv[1], O_RDONLY);
-		if (e->infile == -1)
-			error_infile(e);
+		open_input(e);
 		close(e->pipe[i][0]);
 		dup2(e->infile, STDIN_FILENO);
 		close(e->infile);
 		dup2(e->pipe[i][1], STDOUT_FILENO);
 		close(e->pipe[i][1]);
-		write(2, e->cmdpaths[i], ft_strlen(e->cmdpaths[i]));
 		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else
@@ -124,10 +118,19 @@ void	lastchild(t_envl *e, int i)
 	}
 }
 
+void	open_input(t_envl *e)
+{
+	if (e->here_doc)
+		e->infile = open(e->tempfile, O_RDONLY);
+	else
+		e->infile = open(e->argv[1], O_RDONLY);
+	if (e->infile == -1)
+		error_infile(e);
+}
+
 void	wait_child(t_envl *e)
 {
 	waitpid(e->pid, &e->exitstatus, 0);
 	if (!WIFEXITED(e->exitstatus))
 		error_waitpid(e);
-	ft_printf("Child with PID %i exited.\n", e->pid);
 }
