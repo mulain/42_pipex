@@ -6,11 +6,18 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 11:57:15 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 13:10:49 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	error_outfile(t_envl *e)
+{
+	perror(e->argv[e->argc - 1]);
+	cleanup(e);
+	exit(EXIT_FAILURE);
+}
 
 void	error_argumentcount(void)
 {

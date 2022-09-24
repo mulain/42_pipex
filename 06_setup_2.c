@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 12:00:08 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 13:45:32 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,37 @@ void	allocate_pipes(t_envl *e)
 		e->pipe[i] = malloc(2 * sizeof(int));
 		i++;
 	}
+}
+
+void	check_here_doc(t_envl *e)
+{
+	if (!ft_strncmp(e->argv[1], "here_doc", 9))
+	{
+		e->here_doc = 1;
+		e->tempfile = "here_doc_tempfile";
+		e->n = 5;
+	}
+	else
+	{
+		e->here_doc = 0;
+		e->n = 4;
+	}
+}
+
+/*
+bash will open the outfile even if the commands won't execute.
+So have to move this up here and close the fd again after the
+file was made.
+*/
+void	open_files_prematurely(t_envl *e)
+{
+	if (e->here_doc)
+		e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
+				| O_APPEND, 0644);
+	else
+		e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
+				| O_TRUNC, 0644);
+	if (e->outfile == -1)
+		error_outfile(e);
+	close(e->outfile);
 }

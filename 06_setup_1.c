@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 12:25:26 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 13:46:04 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,6 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	if (argc < 5)
 		error_argumentcount();
-	if (!ft_strncmp(argv[1], "here_doc", 9))
-	{
-		e->here_doc = 1;
-		e->tempfile = "here_doc_tempfile";
-		e->n = 5;
-	}
-	else
-	{
-		e->here_doc = 0;
-		e->n = 4;
-	}
 	e->pipe = NULL;
 	e->input = NULL;
 	e->env_paths = NULL;
@@ -70,6 +59,8 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
+	open_files_prematurely(e);
+	check_here_doc(e);
 	allocate_pipes(e);
 	split_input_cmds(e);
 	split_env_path(e);
@@ -192,7 +183,10 @@ void	get_cmdpaths(t_envl *e)
 		if (get_singlepath(e, i))
 			i++;
 		else
+		{
+			e->i = i;
 			error_path(e);
+		}
 	}
 	e->cmdpaths[i] = NULL;
 }

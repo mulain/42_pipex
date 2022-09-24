@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 20:31:35 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 11:54:43 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 14:06:08 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	here_doc(t_envl *e)
 	e->infile = open(e->tempfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (e->infile == -1)
 		error_here_doc_tempfile(e);
+	write (2, "> ", 2);
 	line = get_next_line(STDIN_FILENO);
 	while (line)
 	{
@@ -40,6 +41,7 @@ void	here_doc(t_envl *e)
 		}
 		write(e->infile, line, ft_strlen(line));
 		free(line);
+		write (2, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
 	}
 	close(e->infile);
