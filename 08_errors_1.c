@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 22:03:08 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 09:46:36 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ void	error_path(t_envl *e)
 	exit(EXIT_FAILURE);
 }
 
-void	error_file1(t_envl *e)
+void	error_infile(t_envl *e)
 {
 	perror(e->argv[1]);
 	cleanup(e);
 	exit(EXIT_FAILURE);
 }
 
-void	error_file2(t_envl *e)
+void	error_outfile(t_envl *e)
 {
 	perror(e->argv[e->argc - 1]);
 	cleanup(e);

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 21:19:27 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 10:04:18 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ execve, exit, fork, pipe, unlink, wait, waitpid
 ./pipex infile "grep a1" "wc -w" outfile
 < infile grep a1 | wc -w > outfile
 
+fd[0] is read end
 fd[1] is write end
-fd[2] is read end
 
 This:
 $> ./pipex file1 cmd1 cmd2 cmd3 ... cmdn file2
@@ -48,7 +48,7 @@ int	main(int argc, char **argv, char **env)
 	i = 0;
 	firstchild(&e, i);
 	i++;
-	while (i < argc - 4)
+	while (i < argc - e.n)
 	{
 		middlechild(&e, i);
 		i++;

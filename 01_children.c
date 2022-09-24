@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 22:22:12 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 09:49:18 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ void	firstchild(t_envl *e, int i)
 	if (e->pid == 0)
 	{
 		if (e->here_doc)
-			e->file1 = open("here_doc_tempfile", O_RDONLY);
+			e->infile = open("here_doc_tempfile", O_RDONLY);
 		else
-			e->file1 = open(e->argv[1], O_RDONLY);
-		if (e->file1 == -1)
-			error_file1(e);
+			e->infile = open(e->argv[1], O_RDONLY);
+		if (e->infile == -1)
+			error_infile(e);
 		close(e->pipe[i][0]);
-		dup2(e->file1, STDIN_FILENO);
-		close(e->file1);
+		dup2(e->infile, STDIN_FILENO);
+		close(e->infile);
 		dup2(e->pipe[i][1], STDOUT_FILENO);
 		close(e->pipe[i][1]);
 		write(2, e->cmdpaths[i], ft_strlen(e->cmdpaths[i]));
@@ -93,7 +93,7 @@ void	middlechild(t_envl *e, int i)
 
 /*
 Last child doesn't need to make another pipe:
-reads from previous child's read end and writes to file2.
+reads from previous child's read end and writes to outfile.
 chmod 0644 -> user has read / write (4 + 2 + 0)
 others only have read (4 + 0 + 0)
 */
@@ -105,17 +105,17 @@ void	lastchild(t_envl *e, int i)
 	if (e->pid == 0)
 	{
 		if (e->here_doc)
-			e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
+			e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
 					| O_APPEND, 0644);
 		else
-			e->file2 = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
+			e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
 					| O_TRUNC, 0644);
-		if (e->file2 == -1)
-			error_file2(e);
+		if (e->outfile == -1)
+			error_outfile(e);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
 		close(e->pipe[i - 1][0]);
-		dup2(e->file2, STDOUT_FILENO);
-		close(e->file2);
+		dup2(e->outfile, STDOUT_FILENO);
+		close(e->outfile);
 		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else

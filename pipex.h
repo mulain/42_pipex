@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 21:32:22 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 10:04:03 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ typedef struct envelope
 	char	**cmdpaths;
 	int		**pipe;
 	int		here_doc;
+	int		n;
 	int		exitstatus;
 	pid_t	pid;
-	int		file1;
-	int		file2;
+	int		infile;
+	int		outfile;
 }	t_envl;
 
 //00_main.c
@@ -71,8 +72,8 @@ void	free2d_int(int **array, int size);
 void	error_pipe(t_envl *e);
 void	error_fork(t_envl *e);
 void	error_path(t_envl *e);
-void	error_file1(t_envl *e);
-void	error_file2(t_envl *e);
+void	error_infile(t_envl *e);
+void	error_outfile(t_envl *e);
 void	error_env(t_envl *e);
 
 //08_errors_2.c

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 17:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/21 21:30:30 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 10:00:20 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ void	cleanup(t_envl *e)
 */
 void	free_mem(t_envl *e)
 {
-	free2d_int(e->pipe, e->argc - 4);
+	if (e->here_doc)
+		free2d_int(e->pipe, e->argc - 5);
+	else
+		free2d_int(e->pipe, e->argc - 4);
 	free3d_char(e->input);
 	free2d_char(e->env_paths);
 	free2d_char(e->cmdpaths);

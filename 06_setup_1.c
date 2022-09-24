@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/23 18:00:02 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/24 10:09:04 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,52 @@
 ***************************************************************************
 Lookup table for numbers for the arguments from argv:*****
 ---No here_doc---
-input:			pipex	file1	cmd_1	cmd_2	cmd_3	file2
+input:			pipex	infile	cmd_1	cmd_2	cmd_3	outfile
 index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5
 argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6
 
-cmd_n		cmd_last		file2
+cmd_n		cmd_last		outfile
 argv_n+1 	argv_argc-2		argv_argc-1
 argc_n+2
 
 ---Yes here_doc---
-input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	file2
+input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	outfile
 index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5	argv_6
 argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6	argc_7
 ***************************************************************************
+
 Vars that will later be malloc'd are nulled to protect the free functions
 if shutdown occurs during an error and they haven't been malloc'd yet.
+
+e.n is used to limit
+- pipe allocation
+- while loop for middlechildren
+no here_doc: number of pipes is argc - n; n = 4 because:
+-1 for program name
+-1 for infile
+-1 for last child
+-1 for outfile
+yes here_doc: number of pipes is argc - n; n= 5 because:
+-1 for program name
+-1 for here_doc
+-1 for limiter
+-1 for last child
+-1 for outfile
 */
 void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	if (argc < 5)
 		error_argumentcount();
 	if (!ft_strncmp(argv[1], "here_doc", 9))
+	{
 		e->here_doc = 1;
+		e->n = 5;
+	}
 	else
+	{
 		e->here_doc = 0;
+		e->n = 4;
+	}
 	e->pipe = NULL;
 	e->input = NULL;
 	e->env_paths = NULL;
