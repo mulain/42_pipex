@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   08_errors_1.c                                      :+:      :+:    :+:   */
+/*   08_errors.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 20:44:12 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 22:19:11 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ void	error_argumentcount(void)
 void	error_msg_exit(t_envl *e, char *msg)
 {
 	perror(msg);
-	cleanup(e);
+	shutdown(e);
 	exit(EXIT_FAILURE);
 }

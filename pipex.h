@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 22:03:14 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 22:18:45 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,54 +41,34 @@ typedef struct envelope
 }	t_envl;
 
 //00_main.c
-//int		main(int argc, char **argv, char **env);
+int		main(int argc, char **argv, char **env);
 void	get_infile(t_envl *e);
 void	get_here_doc(t_envl *e);
 void	get_cmd(t_envl *e, int i);
 
-//01_children_1.c
+//01_children.c
 void	firstchild(t_envl *e, int i);
 void	middlechild(t_envl *e, int i);
 void	lastchild(t_envl *e, int i);
-void	open_input(t_envl *e);
 void	wait_child(t_envl *e);
 
 //02_utils.c
-void	redirect_io(t_envl *e, int input, int output);
 void	rotate_pipes(t_envl *e);
-
-//02_here_doc.c
-void	here_doc(t_envl *e);
+void	redirect_io(t_envl *e, int input, int output);
 
 //06_setup_1.c
 void	setup(t_envl *e, int argc, char **argv, char **env);
 void	split_input_cmds(t_envl *e);
 void	split_env_path(t_envl *e);
-void	allocate_pipes(t_envl *e);
 
 //07_shutdown.c
-void	cleanup(t_envl *e);
-void	free_mem(t_envl *e);
+void	shutdown(t_envl *e);
 void	free3d_char(char ***array);
 void	free2d_char(char **array);
-void	free2d_int(int **array, int size);
 
-//08_errors_1.c
+//08_errors.c
 void	error_argumentcount(void);
 void	error_msg_exit(t_envl *e, char *msg);
-
-
-void	error_pipe(t_envl *e);
-void	error_fork(t_envl *e);
-void	error_path_old(t_envl *e);
-void	error_path(t_envl *e);
-void	error_infile(t_envl *e);
-
-//08_errors_2.c
-void	error_outfile(t_envl *e);
-void	error_here_doc_tempfile(t_envl *e);
-void	error_waitpid(t_envl *e);
-void	error_env(t_envl *e);
 
 //09_helperfunctions.c
 void	print3d(char ***array);

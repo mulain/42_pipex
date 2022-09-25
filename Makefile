@@ -6,7 +6,7 @@
 #    By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 17:11:14 by wmardin           #+#    #+#              #
-#    Updated: 2022/09/25 20:51:23 by wmardin          ###   ########.fr        #
+#    Updated: 2022/09/25 22:18:56 by wmardin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,9 @@ DEFINE =
 NAME =	pipex
 SRC =	00_main.c\
 		01_children.c\
-		02_here_doc.c\
 		02_utils.c\
-		06_setup_1.c\
-		07_cleanup.c\
+		06_setup.c\
+		07_shutdown.c\
 		08_errors.c\
 		09_helperfunctions.c
 

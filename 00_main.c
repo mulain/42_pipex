@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 21:54:32 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 22:20:21 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	main(int argc, char **argv, char **env)
 		i++;
 	}
 	lastchild(&e, i);
-	cleanup(&e);
+	shutdown(&e);
 	return (0);
 }
 
