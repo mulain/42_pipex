@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 20:31:35 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 11:09:57 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 17:13:38 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6	argc_7
 
 Checks if limiter (and only limiter) was received from gnl, if so, breaks.
 If not, writes what was received from gnl to the heredoc in appendmode
+
+
 */
 void	here_doc(t_envl *e)
 {
