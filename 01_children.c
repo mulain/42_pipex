@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 21:53:44 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 23:06:24 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	firstchild(t_envl *e, int i)
 		wait_child(e);
 		if (e->command)
 			free(e->command);
+		e->command = NULL;
 		close(e->curr_pipe[1]);
 		close(e->infile);
 		rotate_pipes(e);
@@ -57,6 +58,7 @@ void	middlechild(t_envl *e, int i)
 		close(e->curr_pipe[1]);
 		if (e->command)
 			free(e->command);
+		e->command = NULL;
 		rotate_pipes(e);
 	}
 }
@@ -92,6 +94,7 @@ void	lastchild(t_envl *e, int i)
 		close(e->prev_pipe[0]);
 		if (e->command)
 			free(e->command);
+		e->command = NULL;
 	}
 }
 
