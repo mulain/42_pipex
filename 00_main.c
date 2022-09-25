@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 17:51:24 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 20:26:59 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,19 @@ leaks -atExit -- ./pipex file1 "cmd1" "cmd2" file2
 int	main(int argc, char **argv, char **env)
 {
 	t_envl		e;
+	int			i;
 
 	setup(&e, argc, argv, env);
 	get_infile(&e);
-	e.i = 0;
-	firstchild(&e, e.i);
-	e.i++;
-	while (e.i < argc - e.n)
+	i = 0;
+	firstchild(&e, i);
+	i++;
+	while (i < argc - e.n)
 	{
-		middlechild(&e, e.i);
-		e.i++;
+		middlechild(&e, i);
+		i++;
 	}
-	lastchild(&e, e.i);
+	lastchild(&e, i);
 	cleanup(&e);
 	return (0);
 }
@@ -87,13 +88,30 @@ void	get_here_doc(t_envl *e)
 	close(e->infile);
 }
 
-
-void	open_input(t_envl *e)
+void	get_cmd(t_envl *e, int i)
 {
-	if (e->here_doc)
-		e->infile = open(e->tempfile, O_RDONLY);
-	else
-		e->infile = open(e->argv[1], O_RDONLY);
-	if (e->infile == -1)
-		error_msg_exit(e, e->argv[1]);
+	int		j;
+
+	if (!access(e->input[i][0], X_OK))
+	{
+		e->command = ft_strdup(e->input[i][0]);
+		return ;
+	}
+	j = 0;
+	e->command = NULL;
+	while (e->env_paths[j] && !e->command)
+	{
+		e->command = ft_strjoin(e->env_paths[j], e->input[i][0]);
+		if (access(e->command, X_OK))
+		{
+			free(e->command);
+			e->command = NULL;
+		}
+		j++;
+	}
+	if (e->command)
+		return ;
+	write(2, e->input[i][0], ft_strlen(e->input[i][0]));
+	write(2, ": command not found\n", 20);
+	e->command = ft_strdup(e->input[i][0]);
 }

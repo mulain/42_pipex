@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   08_errors_1.c                                      :+:      :+:    :+:   */
+/*   test2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/16 17:19:10 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 20:44:12 by wmardin          ###   ########.fr       */
+/*   Created: 2022/09/25 19:10:31 by wmardin           #+#    #+#             */
+/*   Updated: 2022/09/25 19:11:53 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "pipex.h"
 
-void	error_argumentcount(void)
+int	main(int argc, char **argv, char **env)
 {
-	write(2, "Too few arguments.\n", 19);
-	exit(EXIT_FAILURE);
-}
+	char *knudel[2] = {"ls", "-l"};
 
-void	error_msg_exit(t_envl *e, char *msg)
-{
-	perror(msg);
-	cleanup(e);
-	exit(EXIT_FAILURE);
+	execve("ls", knudel , env);
 }

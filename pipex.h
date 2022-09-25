@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 18:35:35 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 20:43:00 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,18 @@ typedef struct envelope
 	char	***input;
 	char	**env_paths;
 	char	**cmdpaths;
+	char	*command;
+
+
 	int		**pipe;
 	int		n;
-	int		i;
 }	t_envl;
 
 //00_main.c
 //int		main(int argc, char **argv, char **env);
+void	get_infile(t_envl *e);
+void	get_here_doc(t_envl *e);
+void	get_cmd(t_envl *e, int i);
 
 //01_children_1.c
 void	firstchild(t_envl *e, int i);

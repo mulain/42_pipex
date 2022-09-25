@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 18:35:03 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 20:41:11 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,14 @@ void	firstchild(t_envl *e, int i)
 	{
 		close(e->now_pipe[0]);
 		redirect_io(e, e->infile, e->now_pipe[1]);
-		execve(e->cmdpaths[i], e->input[i], e->env);
+		get_cmd(e, i);
+		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
 		wait_child(e);
+		if (e->command)
+			free(e->command);
 		close(e->now_pipe[1]);
 		rotate_pipes(e);
 	}
@@ -35,24 +38,25 @@ void	firstchild(t_envl *e, int i)
 
 void	middlechild(t_envl *e, int i)
 {
-	if (pipe(e->pipe[i]) == -1)
+	if (pipe(e->now_pipe) == -1)
 		error_msg_exit(e, "pipe");
 	e->pid = fork();
 	if (e->pid == -1)
 		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
-		dup2(e->pipe[i - 1][0], STDIN_FILENO);
-		close(e->pipe[i - 1][0]);
-		dup2(e->pipe[i][1], STDOUT_FILENO);
-		close(e->pipe[i][1]);
-		execve(e->cmdpaths[i], e->input[i], e->env);
+		redirect_io(e, e->prev_pipe[0], e->now_pipe[1]);
+		get_cmd(e, i);
+		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
 		wait_child(e);
-		close(e->pipe[i - 1][0]);
-		close(e->pipe[i][1]);
+		close(e->prev_pipe[0]);
+		close(e->now_pipe[1]);
+		if (e->command)
+			free(e->command);
+		rotate_pipes(e);
 	}
 }
 
@@ -77,16 +81,16 @@ void	lastchild(t_envl *e, int i)
 					| O_TRUNC, 0644);
 		if (e->outfile == -1)
 			error_msg_exit(e, e->argv[e->argc - 1]);
-		dup2(e->pipe[i - 1][0], STDIN_FILENO);
-		close(e->pipe[i - 1][0]);
-		dup2(e->outfile, STDOUT_FILENO);
-		close(e->outfile);
+		redirect_io(e, e->prev_pipe[0], e->outfile);
+		get_cmd(e, i);
 		execve(e->cmdpaths[i], e->input[i], e->env);
 	}
 	else
 	{
 		wait_child(e);
-		close(e->pipe[i - 1][0]);
+		close(e->prev_pipe[0]);
+		if (e->command)
+			free(e->command);
 	}
 }
 

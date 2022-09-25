@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 17:20:52 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 20:43:37 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,5 @@ void	check_here_doc(t_envl *e)
 	{
 		e->here_doc = 1;
 		e->tempfile = "here_doc.tmp";
-}
-
-/*
-bash will open the outfile even if the commands won't execute.
-So have to move this up here and close the fd again after the
-file was made.
-*/
-void	open_files_prematurely(t_envl *e)
-{
-	if (e->here_doc)
-		e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
-				| O_APPEND, 0644);
-	else
-		e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
-				| O_TRUNC, 0644);
-	if (e->outfile == -1)
-		error_msg_exit(e, e->argv[e->argc - 1]);
-	close(e->outfile);
+	}
 }
