@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 17:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 21:34:57 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 22:01:44 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,6 @@ void	cleanup(t_envl *e)
 		unlink(e->tempfile);
 }
 
-/*
-	allocate_pipes(e);
-	split_input(e);
-	split_env_path(e);
-	get_cmdpaths(e);
-
-	Probably possible to make one free function per dimension and pass
-	void pointer and size=sizeof(whateveristobefreed). Then instead of i++, use
-	i += size. Would alsohave to end int array with NULL.
-	Try out some time, but not now.
-*/
 void	free_mem(t_envl *e)
 {
 	free3d_char(e->input);
@@ -75,21 +64,6 @@ void	free2d_char(char **array)
 		return ;
 	i = 0;
 	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
-}
-
-void	free2d_int(int **array, int size)
-{
-	int		i;
-
-	if (!array)
-		return ;
-	i = 0;
-	while (i < size)
 	{
 		free(array[i]);
 		i++;

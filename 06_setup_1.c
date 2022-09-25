@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 21:44:45 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 22:07:15 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,21 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
-	e->here_doc = 0;
-	e->tempfile = NULL;
-	e->input = NULL;
-	e->env_paths = NULL;
-	e->command = NULL;
 	if (!ft_strncmp(e->argv[1], "here_doc", 9))
 	{
 		e->here_doc = 1;
-		e->tempfile = "here_doc.tmp"; //maybe free this?
+		e->tempfile = "here_doc.tmp";
+	}
+	else
+	{
+		e->here_doc = 0;
+		e->tempfile = NULL;
 	}
 	e->curr_pipe = e->pipes[0];
 	e->prev_pipe = e->pipes[1];
+	e->input = NULL;
+	e->env_paths = NULL;
+	e->command = NULL;
 	split_input_cmds(e);
 	split_env_path(e);
 }
