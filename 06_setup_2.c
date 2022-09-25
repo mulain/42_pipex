@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 11:13:39 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 17:20:52 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,6 @@ void	check_here_doc(t_envl *e)
 	{
 		e->here_doc = 1;
 		e->tempfile = "here_doc.tmp";
-		e->n = 5;
-	}
-	else
-	{
-		e->here_doc = 0;
-		e->n = 4;
-	}
 }
 
 /*

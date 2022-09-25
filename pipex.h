@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 16:49:46 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 18:35:35 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,22 @@ typedef struct envelope
 	int		argc;
 	char	**argv;
 	char	**env;
+	int		here_doc;
+	char	*tempfile;
+	int		infile;
+	int		outfile;
+	pid_t	pid;
+	int		exitstatus;
+	int		pipes[3][2];
+	int		*prev_pipe;
+	int		*now_pipe;
+	int		*next_pipe;
 	char	***input;
 	char	**env_paths;
 	char	**cmdpaths;
 	int		**pipe;
-	int		here_doc;
-	char	*tempfile;
 	int		n;
 	int		i;
-	int		exitstatus;
-	pid_t	pid;
-	int		infile;
-	int		outfile;
 }	t_envl;
 
 //00_main.c
@@ -49,6 +53,10 @@ void	middlechild(t_envl *e, int i);
 void	lastchild(t_envl *e, int i);
 void	open_input(t_envl *e);
 void	wait_child(t_envl *e);
+
+//02_utils.c
+void	redirect_io(t_envl *e, int input, int output);
+void	rotate_pipes(t_envl *e);
 
 //02_here_doc.c
 void	here_doc(t_envl *e);

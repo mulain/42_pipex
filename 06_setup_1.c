@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 16:55:45 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 18:09:28 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,28 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	if (argc < 5)
 		error_argumentcount();
-	e->pipe = NULL;
-	e->input = NULL;
-	e->env_paths = NULL;
-	e->cmdpaths = NULL;
 	e->argc = argc;
 	e->argv = argv;
 	e->env = env;
-	open_files_prematurely(e);
-	check_here_doc(e);
-	split_input_cmds(e);
+	e->here_doc = 0;
+	e->input = NULL;
+	e->env_paths = NULL;
+	e->cmdpaths = NULL;
+	e->pipe = NULL;
+	if (!ft_strncmp(e->argv[1], "here_doc", 9))
+	{
+		e->here_doc = 1;
+		e->tempfile = "here_doc.tmp";
+	}
+	e->now_pipe = e->pipes[0];
+	e->next_pipe = e->pipes[1];
+	e->prev_pipe = e->pipes[2];
+
+	//open_files_prematurely(e);
+	/* split_input_cmds(e);
 	split_env_path(e);
 	get_cmdpaths(e);
-	allocate_pipes(e);
+	allocate_pipes(e); */
 }
 
 /*
