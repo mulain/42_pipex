@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 14:28:51 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 13:45:32 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 11:13:39 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	check_here_doc(t_envl *e)
 	if (!ft_strncmp(e->argv[1], "here_doc", 9))
 	{
 		e->here_doc = 1;
-		e->tempfile = "here_doc_tempfile";
+		e->tempfile = "here_doc.tmp";
 		e->n = 5;
 	}
 	else
@@ -76,6 +76,6 @@ void	open_files_prematurely(t_envl *e)
 		e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
 				| O_TRUNC, 0644);
 	if (e->outfile == -1)
-		error_outfile(e);
+		error_msg_exit(e, e->argv[e->argc - 1]);
 	close(e->outfile);
 }

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 13:45:47 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 16:49:46 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,10 @@ void	free2d_char(char **array);
 void	free2d_int(int **array, int size);
 
 //08_errors_1.c
+void	error_argumentcount(void);
+void	error_msg_exit(t_envl *e, char *msg);
+
+
 void	error_pipe(t_envl *e);
 void	error_fork(t_envl *e);
 void	error_path_old(t_envl *e);
@@ -81,7 +85,6 @@ void	error_infile(t_envl *e);
 
 //08_errors_2.c
 void	error_outfile(t_envl *e);
-void	error_argumentcount(void);
 void	error_here_doc_tempfile(t_envl *e);
 void	error_waitpid(t_envl *e);
 void	error_env(t_envl *e);

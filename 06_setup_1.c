@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 13:46:04 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 16:55:45 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	e->env = env;
 	open_files_prematurely(e);
 	check_here_doc(e);
-	allocate_pipes(e);
 	split_input_cmds(e);
 	split_env_path(e);
 	get_cmdpaths(e);
+	allocate_pipes(e);
 }
 
 /*
@@ -128,11 +128,11 @@ void	split_env_path(t_envl *e)
 
 	i = 0;
 	if (!e->env)
-		error_env(e);
+		error_msg_exit(e, "env");
 	while (e->env[i] && ft_strncmp(e->env[i], "PATH=", 5))
 		i++;
 	if (!e->env[i])
-		error_env(e);
+		error_msg_exit(e, "env");
 	e->env_paths = ft_split(e->env[i] + 5, ':');
 	i = 0;
 	while (e->env_paths[i])
@@ -168,6 +168,9 @@ malloc argc - n; n = 3 because:
 -1 for delimiter
 -1 for file 2
 +1 for NULL
+
+Using char* and allocating to it is probably not smart. But it's
+a norm-shitfest if not (line super long with ft_strlen in the write).
 */
 void	get_cmdpaths(t_envl *e)
 {
@@ -180,13 +183,12 @@ void	get_cmdpaths(t_envl *e)
 	i = 0;
 	while (e->input[i])
 	{
-		if (get_singlepath(e, i))
-			i++;
-		else
+		if (!get_singlepath(e, i))
 		{
-			e->i = i;
-			error_path(e);
+			write(2, e->input[i][0], ft_strlen(e->input[i][0]));
+			write(2, ": command not found\n", 20);
 		}
+		i++;
 	}
 	e->cmdpaths[i] = NULL;
 }

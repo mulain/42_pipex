@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 20:31:35 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 14:06:08 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 11:09:57 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	outfile
 index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5	argv_6
 argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6	argc_7
 
-Checks if delimiter (and only delimiter) was received from gnl, if so, breaks.
+Checks if limiter (and only limiter) was received from gnl, if so, breaks.
 If not, writes what was received from gnl to the heredoc in appendmode
 */
 void	here_doc(t_envl *e)
@@ -27,8 +27,8 @@ void	here_doc(t_envl *e)
 
 	e->infile = open(e->tempfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (e->infile == -1)
-		error_here_doc_tempfile(e);
-	write (2, "> ", 2);
+		error_msg_exit(e, e->tempfile);
+	write (1, "> ", 2);
 	line = get_next_line(STDIN_FILENO);
 	while (line)
 	{
@@ -41,7 +41,7 @@ void	here_doc(t_envl *e)
 		}
 		write(e->infile, line, ft_strlen(line));
 		free(line);
-		write (2, "> ", 2);
+		write (1, "> ", 2);
 		line = get_next_line(STDIN_FILENO);
 	}
 	close(e->infile);

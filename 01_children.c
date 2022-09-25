@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/24 12:26:46 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 10:59:39 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ No "else" needed after firstchild_standard because execve is called.
 void	firstchild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
-		error_pipe(e);
+		error_msg_exit(e, "pipe");
 	e->pid = fork();
 	if (e->pid == -1)
-		error_fork(e);
+		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
 		open_input(e);
@@ -64,10 +64,10 @@ void	firstchild(t_envl *e, int i)
 void	middlechild(t_envl *e, int i)
 {
 	if (pipe(e->pipe[i]) == -1)
-		error_pipe(e);
+		error_msg_exit(e, "pipe");
 	e->pid = fork();
 	if (e->pid == -1)
-		error_fork(e);
+		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
@@ -94,7 +94,7 @@ void	lastchild(t_envl *e, int i)
 {
 	e->pid = fork();
 	if (e->pid == -1)
-		error_fork(e);
+		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
 		if (e->here_doc)
@@ -104,7 +104,7 @@ void	lastchild(t_envl *e, int i)
 			e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
 					| O_TRUNC, 0644);
 		if (e->outfile == -1)
-			error_outfile(e);
+			error_msg_exit(e, e->argv[e->argc - 1]);
 		dup2(e->pipe[i - 1][0], STDIN_FILENO);
 		close(e->pipe[i - 1][0]);
 		dup2(e->outfile, STDOUT_FILENO);
@@ -125,12 +125,12 @@ void	open_input(t_envl *e)
 	else
 		e->infile = open(e->argv[1], O_RDONLY);
 	if (e->infile == -1)
-		error_infile(e);
+		error_msg_exit(e, e->argv[1]);
 }
 
 void	wait_child(t_envl *e)
 {
 	waitpid(e->pid, &e->exitstatus, 0);
 	if (!WIFEXITED(e->exitstatus))
-		error_waitpid(e);
+		error_msg_exit(e, "waitpid");
 }
