@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 23:06:24 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 23:35:38 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,15 @@ void	firstchild(t_envl *e, int i)
 	if (e->pid == 0)
 	{
 		close(e->curr_pipe[0]);
-		redirect_io(e, e->infile, e->curr_pipe[1]);
+		//redirect_io(e, e->infile, e->curr_pipe[1]);
+
+		if (dup2(e->infile, STDIN_FILENO) == -1)
+			error_msg_exit(e, "redirect input");
+		close(e->infile);
+		if (dup2(e->curr_pipe[1], STDOUT_FILENO) == -1)
+			error_msg_exit(e, "redirect outputsdfsd");
+		close(e->curr_pipe[1]);
+
 		get_cmd(e, i);
 		execve(e->command, e->input[i], e->env);
 	}
