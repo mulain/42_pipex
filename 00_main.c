@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 20:26:59 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 21:30:51 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,29 @@
 /*
 Mac leakcheck:
 leaks -atExit -- ./pipex file1 "cmd1" "cmd2" file2
+
+***************************************************************************
+Lookup table for numbers for the arguments from argv:
+---No here_doc---
+input:			pipex	infile	cmd_1	cmd_2	cmd_3	outfile
+index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5
+argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6
+
+cmd_n		cmd_last		outfile
+argv_n+1 	argv_argc-2		argv_argc-1
+argc_n+2
+
+---Yes here_doc---
+input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	outfile
+index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5	argv_6
+argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6	argc_7
+***************************************************************************
+while loop children limitation:
+-1 for program name
+-1 for infile / here_doc
+(-1 for limiter if here_doc -> subtract here_doc value)
+-1 for lastchild (after loop)
+-1 for outfile
 */
 int	main(int argc, char **argv, char **env)
 {
@@ -26,11 +49,15 @@ int	main(int argc, char **argv, char **env)
 	i = 0;
 	firstchild(&e, i);
 	i++;
-	while (i < argc - e.n)
+	while (i < argc - 4 - e.here_doc)
 	{
+		printf("middle\n");
+		printf("i:%i\n", i);
 		middlechild(&e, i);
 		i++;
 	}
+	printf("hellolast\n");
+	printf("i:%i\n", i);
 	lastchild(&e, i);
 	cleanup(&e);
 	return (0);
@@ -74,8 +101,7 @@ void	get_here_doc(t_envl *e)
 	while (line)
 	{
 		if (!ft_strncmp(line, e->argv[2], ft_strlen(e->argv[2]))
-			&& line[ft_strlen(e->argv[2])] == '\n'
-			&& line[ft_strlen(e->argv[2]) + 1] == 0) //ackchually needed? if gnl works, then no
+			&& line[ft_strlen(e->argv[2])] == '\n')
 		{
 			free(line);
 			break ;

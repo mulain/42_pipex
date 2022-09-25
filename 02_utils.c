@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   02_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 18:07:20 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 18:35:26 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 20:57:52 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	rotate_pipes(t_envl *e)
 {
 	int		*temp;
 
-	temp = e->now_pipe;
-	e->now_pipe = e->prev_pipe;
-	e->prev_pipe = e->next_pipe;
-	e->next_pipe = temp;
+	temp = e->prev_pipe;
+	e->prev_pipe = e->now_pipe;
+	e->now_pipe = temp;
+	//e->next_pipe = temp;
 }
 
 void	redirect_io(t_envl *e, int input, int output)

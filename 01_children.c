@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 20:41:11 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 21:31:55 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	lastchild(t_envl *e, int i)
 			error_msg_exit(e, e->argv[e->argc - 1]);
 		redirect_io(e, e->prev_pipe[0], e->outfile);
 		get_cmd(e, i);
-		execve(e->cmdpaths[i], e->input[i], e->env);
+		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{

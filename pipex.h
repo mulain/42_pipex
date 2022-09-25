@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 20:43:00 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 20:51:44 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,7 @@ void	here_doc(t_envl *e);
 void	setup(t_envl *e, int argc, char **argv, char **env);
 void	split_input_cmds(t_envl *e);
 void	split_env_path(t_envl *e);
-void	get_cmdpaths(t_envl *e);
-int		get_singlepath(t_envl *e, int i);
-
-//06_setup_2.c
 void	allocate_pipes(t_envl *e);
-void	check_here_doc(t_envl *e);
-void	open_files_prematurely(t_envl *e);
 
 //07_shutdown.c
 void	cleanup(t_envl *e);

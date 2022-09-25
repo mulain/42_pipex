@@ -6,30 +6,13 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 18:47:01 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 21:23:28 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /*
-***************************************************************************
-Lookup table for numbers for the arguments from argv:*****
----No here_doc---
-input:			pipex	infile	cmd_1	cmd_2	cmd_3	outfile
-index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5
-argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6
-
-cmd_n		cmd_last		outfile
-argv_n+1 	argv_argc-2		argv_argc-1
-argc_n+2
-
----Yes here_doc---
-input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	outfile
-index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5	argv_6
-argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6	argc_7
-***************************************************************************
-
 Vars that will later be malloc'd are nulled to protect the free functions
 if shutdown occurs during an error and they haven't been malloc'd yet.
 
@@ -41,7 +24,7 @@ no here_doc: number of pipes is argc - n; n = 4 because:
 -1 for infile
 -1 for last child
 -1 for outfile
-yes here_doc: number of pipes is argc - n; n= 5 because:
+yes here_doc: number of pipes is argc - n; n = 5 because:
 -1 for program name
 -1 for here_doc
 -1 for limiter
@@ -56,6 +39,7 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	e->argv = argv;
 	e->env = env;
 	e->here_doc = 0;
+	e->tempfile = NULL;
 	e->input = NULL;
 	e->env_paths = NULL;
 	e->cmdpaths = NULL;
@@ -63,18 +47,13 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 	if (!ft_strncmp(e->argv[1], "here_doc", 9))
 	{
 		e->here_doc = 1;
-		e->tempfile = "here_doc.tmp";
+		e->tempfile = "here_doc.tmp"; //maybe free this?
 	}
 	e->now_pipe = e->pipes[0];
 	e->next_pipe = e->pipes[1];
 	e->prev_pipe = e->pipes[2];
 	split_input_cmds(e);
 	split_env_path(e);
-	//open_files_prematurely(e);
-	/*
-
-	get_cmdpaths(e);
-	allocate_pipes(e); */
 }
 
 /*
@@ -124,7 +103,7 @@ void	split_input_cmds(t_envl *e)
 /*
 -	Iterates through env until the string starting with "PATH=" is found.
 - 	Splits that string beginning at 5 bytes after the start to omit "PATH=".
-	using delimiter ':'. Result ist stored in e.path.
+	using delimiter ':'. Result is stored in e.path.
 -	If the resulting string doesn't end with "/", "/" is appended to create
 	a valid path format.
 	(In WSL2 on Win11 one path did already end with "/". Was a Windows path, but
@@ -159,86 +138,36 @@ void	split_env_path(t_envl *e)
 }
 
 /*
-Iterates through the received commands.
-Calls get_singlepath for each command to find the correct path / test if
-there is a path. If no path is found, exits. If a path is found, get_singlepath
-writes it to the struct. Ends with assigning a NULL pointer.
+Instead of making a pipe for each process, re-use old int array?
+Would need
+	int	pipe[2][2]
+and a reference for each 1d array:
+	int	*pipe_a (starts as pipe_a = pipe[0])
+	int *pipe_b	(starts as pipe_b = pipe[1])
+then switch between pipe_a and pipe_b...
+Meh...
 
-No here_doc:
-malloc argc - n; n = 2 because:
+number of pipes is argc - n; n = 4 because:
 -1 for program name
--1 for file 1
--1 for file 2
-+1 for NULL
-
-Yes here_doc:
-malloc argc - n; n = 3 because:
+-1 for infile
+-1 for last child
+-1 for oufile
+If using here_doc, argc - n; n= 5 because:
 -1 for program name
 -1 for here_doc
--1 for delimiter
--1 for file 2
-+1 for NULL
-
-Using char* and allocating to it is probably not smart. But it's
-a norm-shitfest if not (line super long with ft_strlen in the write).
+-1 for limiter
+-1 for last child
+-1 for outfile
 */
-void	get_cmdpaths(t_envl *e)
+void	allocate_pipes(t_envl *e)
 {
 	int		i;
 
-	if (e->here_doc)
-		e->cmdpaths = malloc((e->argc - 3) * sizeof(char *));
-	else
-		e->cmdpaths = malloc((e->argc - 2) * sizeof(char *));
+	e->pipe = malloc((e->argc - e->n) * sizeof(int *));
 	i = 0;
-	while (e->input[i])
+	while (i < e->argc - e->n)
 	{
-		if (!get_singlepath(e, i))
-		{
-			write(2, e->input[i][0], ft_strlen(e->input[i][0]));
-			write(2, ": command not found\n", 20);
-		}
+		e->pipe[i] = malloc(2 * sizeof(int));
 		i++;
 	}
-	e->cmdpaths[i] = NULL;
-}
-
-/*
-Returns 1 if a valid path for the command of index i was found, 0 if not.
-Joins env_paths[n] to the command until a valid command path is found or no
-more paths exist to try.
--	first checks if full cmd path was entered (i.e /usr/bin/ls)
--	uses access to determine if file exists and has exec rights
-	-	if access != 0:
-		-	frees and nulls
-		-	increments j and tries the next command path
-	-	if access = 0:
-		- current command path is kept
-		- the while condition !e.cmdpaths[i] breaks
-Returns 1 or 0 depending on e.cmdpaths[i].
-*/
-int	get_singlepath(t_envl *e, int i)
-{
-	int		j;
-
-	if (!access(e->input[i][0], X_OK))
-	{
-		e->cmdpaths[i] = ft_strdup(e->input[i][0]);
-		return (1);
-	}
-	j = 0;
-	e->cmdpaths[i] = NULL;
-	while (e->env_paths[j] && !e->cmdpaths[i])
-	{
-		e->cmdpaths[i] = ft_strjoin(e->env_paths[j], e->input[i][0]);
-		if (access(e->cmdpaths[i], X_OK))
-		{
-			free(e->cmdpaths[i]);
-			e->cmdpaths[i] = NULL;
-		}
-		j++;
-	}
-	if (e->cmdpaths[i])
-		return (1);
-	return (0);
 }
