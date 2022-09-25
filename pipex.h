@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 20:51:44 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 21:41:34 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,12 @@ typedef struct envelope
 	int		outfile;
 	pid_t	pid;
 	int		exitstatus;
-	int		pipes[3][2];
+	int		pipes[2][2];
 	int		*prev_pipe;
-	int		*now_pipe;
-	int		*next_pipe;
+	int		*curr_pipe;
 	char	***input;
 	char	**env_paths;
-	char	**cmdpaths;
 	char	*command;
-
-
-	int		**pipe;
-	int		n;
 }	t_envl;
 
 //00_main.c

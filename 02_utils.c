@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 18:07:20 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 20:57:52 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 21:44:11 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ void	rotate_pipes(t_envl *e)
 	int		*temp;
 
 	temp = e->prev_pipe;
-	e->prev_pipe = e->now_pipe;
-	e->now_pipe = temp;
-	//e->next_pipe = temp;
+	e->prev_pipe = e->curr_pipe;
+	e->curr_pipe = temp;
 }
 
 void	redirect_io(t_envl *e, int input, int output)

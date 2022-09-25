@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 21:31:55 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/25 21:53:44 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	firstchild(t_envl *e, int i)
 {
-	if (pipe(e->now_pipe) == -1)
+	if (pipe(e->curr_pipe) == -1)
 		error_msg_exit(e, "pipe");
 	e->pid = fork();
 	if (e->pid == -1)
 		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
-		close(e->now_pipe[0]);
-		redirect_io(e, e->infile, e->now_pipe[1]);
+		close(e->curr_pipe[0]);
+		redirect_io(e, e->infile, e->curr_pipe[1]);
 		get_cmd(e, i);
 		execve(e->command, e->input[i], e->env);
 	}
@@ -31,21 +31,22 @@ void	firstchild(t_envl *e, int i)
 		wait_child(e);
 		if (e->command)
 			free(e->command);
-		close(e->now_pipe[1]);
+		close(e->curr_pipe[1]);
+		close(e->infile);
 		rotate_pipes(e);
 	}
 }
 
 void	middlechild(t_envl *e, int i)
 {
-	if (pipe(e->now_pipe) == -1)
+	if (pipe(e->curr_pipe) == -1)
 		error_msg_exit(e, "pipe");
 	e->pid = fork();
 	if (e->pid == -1)
 		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
-		redirect_io(e, e->prev_pipe[0], e->now_pipe[1]);
+		redirect_io(e, e->prev_pipe[0], e->curr_pipe[1]);
 		get_cmd(e, i);
 		execve(e->command, e->input[i], e->env);
 	}
@@ -53,7 +54,7 @@ void	middlechild(t_envl *e, int i)
 	{
 		wait_child(e);
 		close(e->prev_pipe[0]);
-		close(e->now_pipe[1]);
+		close(e->curr_pipe[1]);
 		if (e->command)
 			free(e->command);
 		rotate_pipes(e);
