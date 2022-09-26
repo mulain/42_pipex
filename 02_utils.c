@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 18:07:20 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 08:56:56 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/26 13:29:30 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	get_cmd(t_envl *e, int i)
 	write(2, e->input[i][0], ft_strlen(e->input[i][0]));
 	write(2, ": command not found\n", 20);
 	e->command = ft_strdup(e->input[i][0]);
-	close(e->curr_pipe[1]);
+	//close(e->curr_pipe[1]);
 }
 
 void	rotate_pipes(t_envl *e)

@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 09:10:12 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/26 13:28:37 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ void	firstchild(t_envl *e, int i)
 		close(e->curr_pipe[0]);
 		redirect_io(e, e->infile, e->curr_pipe[1]);
 		get_cmd(e, i);
+		if (!e->command)
+		{
+			return ;
+		}
 		execve(e->command, e->input[i], e->env);
 	}
 	else
@@ -49,10 +53,15 @@ void	middlechild(t_envl *e, int i)
 	{
 		redirect_io(e, e->prev_pipe[0], e->curr_pipe[1]);
 		get_cmd(e, i);
+		/* if (!e->command)
+		{
+			return ;
+		} */
 		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
+		printf("middlechild PID:%i\n", e->pid);
 		wait_child(e);
 		close(e->prev_pipe[0]);
 		close(e->curr_pipe[1]);
@@ -86,10 +95,15 @@ void	lastchild(t_envl *e, int i)
 			error_msg_exit(e, e->argv[e->argc - 1]);
 		redirect_io(e, e->prev_pipe[0], e->outfile);
 		get_cmd(e, i);
+		if (!e->command)
+		{
+			return ;
+		}
 		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
+		printf("lastchild PID:%i\n", e->pid);
 		wait_child(e);
 		close(e->prev_pipe[0]);
 		if (e->command)
