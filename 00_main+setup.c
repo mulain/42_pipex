@@ -1,36 +1,65 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   06_setup.c                                         :+:      :+:    :+:   */
+/*   00_main.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/16 18:42:22 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 23:38:44 by wmardin          ###   ########.fr       */
+/*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
+/*   Updated: 2022/09/26 08:56:49 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
 /*
-Vars that will later be malloc'd are nulled to protect the free functions
-if shutdown occurs during an error and they haven't been malloc'd yet.
+Mac leakcheck:
+leaks -atExit -- ./pipex file1 "cmd1" "cmd2" file2
 
-e.n is used to limit
-- pipe allocation
-- while loop for middlechildren
-no here_doc: number of pipes is argc - n; n = 4 because:
+***************************************************************************
+Lookup table for numbers for the arguments from argv:
+---No here_doc---
+input:			pipex	infile	cmd_1	cmd_2	cmd_3	outfile
+index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5
+argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6
+
+cmd_n		cmd_last		outfile
+argv_n+1 	argv_argc-2		argv_argc-1
+argc_n+2
+
+---Yes here_doc---
+input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	outfile
+index in argv:	argv_0	argv_1	argv_2	argv_3	argv_4	argv_5	argv_6
+argc_value:		argc_1	argc_2	argc_3	argc_4	argc_5	argc_6	argc_7
+***************************************************************************
+while loop children limitation:
 -1 for program name
--1 for infile
--1 for last child
--1 for outfile
-yes here_doc: number of pipes is argc - n; n = 5 because:
--1 for program name
--1 for here_doc
--1 for limiter
--1 for last child
+-1 for infile / here_doc
+(-1 for limiter if here_doc -> subtract here_doc value)
+[-1 for firstchild (but i is initiallized before firstchild at 0 and ++'d after)]
+-1 for lastchild (after loop)
 -1 for outfile
 */
+int	main(int argc, char **argv, char **env)
+{
+	t_envl		e;
+	int			i;
+
+	setup(&e, argc, argv, env);
+	get_infile(&e);
+	i = 0;
+	firstchild(&e, i);
+	i++;
+	while (i < argc - 4 - e.here_doc)
+	{
+		middlechild(&e, i);
+		i++;
+	}
+	lastchild(&e, i);
+	shutdown(&e);
+	return (0);
+}
+
 void	setup(t_envl *e, int argc, char **argv, char **env)
 {
 	if (argc < 5)

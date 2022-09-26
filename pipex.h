@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/25 22:18:45 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/26 08:59:05 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ typedef struct envelope
 
 //00_main.c
 int		main(int argc, char **argv, char **env);
-void	get_infile(t_envl *e);
-void	get_here_doc(t_envl *e);
-void	get_cmd(t_envl *e, int i);
+void	setup(t_envl *e, int argc, char **argv, char **env);
+void	split_input_cmds(t_envl *e);
+void	split_env_path(t_envl *e);
 
 //01_children.c
 void	firstchild(t_envl *e, int i);
@@ -53,13 +53,11 @@ void	lastchild(t_envl *e, int i);
 void	wait_child(t_envl *e);
 
 //02_utils.c
+void	get_infile(t_envl *e);
+void	get_here_doc(t_envl *e);
+void	get_cmd(t_envl *e, int i);
 void	rotate_pipes(t_envl *e);
 void	redirect_io(t_envl *e, int input, int output);
-
-//06_setup_1.c
-void	setup(t_envl *e, int argc, char **argv, char **env);
-void	split_input_cmds(t_envl *e);
-void	split_env_path(t_envl *e);
 
 //07_shutdown.c
 void	shutdown(t_envl *e);
