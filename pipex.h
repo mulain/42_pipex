@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 08:59:05 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/26 21:45:47 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ void	lastchild(t_envl *e, int i);
 void	wait_child(t_envl *e);
 
 //02_utils.c
-void	get_infile(t_envl *e);
+void	get_io_files(t_envl *e);
 void	get_here_doc(t_envl *e);
-void	get_cmd(t_envl *e, int i);
+int		get_cmd(t_envl *e, int i);
 void	rotate_pipes(t_envl *e);
 void	redirect_io(t_envl *e, int input, int output);
 

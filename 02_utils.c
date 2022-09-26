@@ -6,13 +6,13 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 18:07:20 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 13:29:30 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/26 21:50:03 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	get_infile(t_envl *e)
+void	get_io_files(t_envl *e)
 {
 	if (e->here_doc)
 	{
@@ -27,6 +27,14 @@ void	get_infile(t_envl *e)
 		if (e->infile == -1)
 			error_msg_exit(e, e->argv[1]);
 	}
+	if (e->here_doc)
+		e->outfile = open(e->argv[e->argc - 1],
+				O_CREAT | O_RDWR | O_APPEND, 0644);
+	else
+		e->outfile = open(e->argv[e->argc - 1],
+				O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (e->outfile == -1)
+		error_msg_exit(e, e->argv[e->argc - 1]);
 }
 
 /*
@@ -63,14 +71,14 @@ void	get_here_doc(t_envl *e)
 	close(e->infile);
 }
 
-void	get_cmd(t_envl *e, int i)
+int	get_cmd(t_envl *e, int i)
 {
 	int		j;
 
 	if (!access(e->input[i][0], X_OK))
 	{
 		e->command = ft_strdup(e->input[i][0]);
-		return ;
+		return (1);
 	}
 	j = 0;
 	e->command = NULL;
@@ -85,11 +93,10 @@ void	get_cmd(t_envl *e, int i)
 		j++;
 	}
 	if (e->command)
-		return ;
+		return (1);
 	write(2, e->input[i][0], ft_strlen(e->input[i][0]));
 	write(2, ": command not found\n", 20);
-	e->command = ft_strdup(e->input[i][0]);
-	//close(e->curr_pipe[1]);
+	return (0);
 }
 
 void	rotate_pipes(t_envl *e)

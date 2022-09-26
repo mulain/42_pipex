@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 13:28:37 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/26 21:53:28 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,18 @@ void	firstchild(t_envl *e, int i)
 	{
 		close(e->curr_pipe[0]);
 		redirect_io(e, e->infile, e->curr_pipe[1]);
-		get_cmd(e, i);
-		if (!e->command)
-		{
-			return ;
-		}
+		if (!get_cmd(e, i))
+			exit(EXIT_FAILURE);
 		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
 		wait_child(e);
+		close(e->infile);
+		close(e->curr_pipe[1]);
 		if (e->command)
 			free(e->command);
 		e->command = NULL;
-		close(e->curr_pipe[1]);
-		close(e->infile);
 		rotate_pipes(e);
 	}
 }
@@ -52,16 +49,12 @@ void	middlechild(t_envl *e, int i)
 	if (e->pid == 0)
 	{
 		redirect_io(e, e->prev_pipe[0], e->curr_pipe[1]);
-		get_cmd(e, i);
-		/* if (!e->command)
-		{
-			return ;
-		} */
+		if (!get_cmd(e, i))
+			exit(EXIT_FAILURE);
 		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
-		printf("middlechild PID:%i\n", e->pid);
 		wait_child(e);
 		close(e->prev_pipe[0]);
 		close(e->curr_pipe[1]);
@@ -85,27 +78,16 @@ void	lastchild(t_envl *e, int i)
 		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
-		if (e->here_doc)
-			e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
-					| O_APPEND, 0644);
-		else
-			e->outfile = open(e->argv[e->argc - 1], O_CREAT | O_RDWR
-					| O_TRUNC, 0644);
-		if (e->outfile == -1)
-			error_msg_exit(e, e->argv[e->argc - 1]);
 		redirect_io(e, e->prev_pipe[0], e->outfile);
-		get_cmd(e, i);
-		if (!e->command)
-		{
-			return ;
-		}
+		if (!get_cmd(e, i))
+			exit(EXIT_FAILURE);
 		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
-		printf("lastchild PID:%i\n", e->pid);
 		wait_child(e);
 		close(e->prev_pipe[0]);
+		close(e->outfile);
 		if (e->command)
 			free(e->command);
 		e->command = NULL;
