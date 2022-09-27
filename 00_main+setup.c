@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 14:02:58 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 20:44:40 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,7 @@ int	main(int argc, char **argv, char **env)
 
 void	setup(t_envl *e, int argc, char **argv, char **env)
 {
-	if (argc < 5)
-		error_argumentcount();
-	e->argc = argc;
-	e->argv = argv;
-	e->env = env;
-	if (!ft_strncmp(e->argv[1], "here_doc", 9))
+	if (!ft_strncmp(argv[1], "here_doc", 9))
 	{
 		e->here_doc = 1;
 		e->tempfile = "here_doc.tmp";
@@ -77,6 +72,11 @@ void	setup(t_envl *e, int argc, char **argv, char **env)
 		e->here_doc = 0;
 		e->tempfile = NULL;
 	}
+	if (argc < 5 + e->here_doc)
+		error_argumentcount();
+	e->argc = argc;
+	e->argv = argv;
+	e->env = env;
 	e->curr_pipe = e->pipes[0];
 	e->prev_pipe = e->pipes[1];
 	e->input = NULL;
