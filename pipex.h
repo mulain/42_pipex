@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 21:45:47 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/26 22:13:07 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int		main(int argc, char **argv, char **env);
 void	setup(t_envl *e, int argc, char **argv, char **env);
 void	split_input_cmds(t_envl *e);
 void	split_env_path(t_envl *e);
+void	get_infile(t_envl *e);
+void	get_outfile(t_envl *e);
 
 //01_children.c
 void	firstchild(t_envl *e, int i);
@@ -53,7 +55,8 @@ void	lastchild(t_envl *e, int i);
 void	wait_child(t_envl *e);
 
 //02_utils.c
-void	get_io_files(t_envl *e);
+void	get_in_file(t_envl *e);
+void	get_outfile(t_envl *e);
 void	get_here_doc(t_envl *e);
 int		get_cmd(t_envl *e, int i);
 void	rotate_pipes(t_envl *e);

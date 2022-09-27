@@ -6,13 +6,13 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 18:07:20 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 21:50:03 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/26 22:12:47 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	get_io_files(t_envl *e)
+void	get_infile(t_envl *e)
 {
 	if (e->here_doc)
 	{
@@ -27,6 +27,10 @@ void	get_io_files(t_envl *e)
 		if (e->infile == -1)
 			error_msg_exit(e, e->argv[1]);
 	}
+}
+
+void	get_outfile(t_envl *e)
+{
 	if (e->here_doc)
 		e->outfile = open(e->argv[e->argc - 1],
 				O_CREAT | O_RDWR | O_APPEND, 0644);
@@ -36,7 +40,6 @@ void	get_io_files(t_envl *e)
 	if (e->outfile == -1)
 		error_msg_exit(e, e->argv[e->argc - 1]);
 }
-
 /*
 ---Input table for heredoc---
 input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	outfile

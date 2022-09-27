@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 21:53:28 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 08:23:04 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	firstchild(t_envl *e, int i)
 		close(e->curr_pipe[0]);
 		redirect_io(e, e->infile, e->curr_pipe[1]);
 		if (!get_cmd(e, i))
-			exit(EXIT_FAILURE);
+			exit(EXIT_SUCCESS);
 		execve(e->command, e->input[i], e->env);
 	}
 	else
@@ -95,6 +95,12 @@ void	lastchild(t_envl *e, int i)
 }
 
 void	wait_child(t_envl *e)
+{
+	if (waitpid(e->pid, &e->exitstatus, WNOHANG) == -1)
+		error_msg_exit(e, "waitpid");
+}
+
+void	wait_child_old(t_envl *e)
 {
 	waitpid(e->pid, &e->exitstatus, 0);
 	if (!WIFEXITED(e->exitstatus))

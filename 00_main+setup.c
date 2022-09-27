@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 21:47:55 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 08:22:34 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ while loop children limitation:
 -1 for program name
 -1 for infile / here_doc
 (-1 for limiter if here_doc -> subtract here_doc value)
-[-1 for firstchild (but i is initiallized before firstchild at 0 and ++'d after)]
+(-1 for firstchild, but i starts at 1)
 -1 for lastchild (after loop)
 -1 for outfile
 */
@@ -46,15 +46,16 @@ int	main(int argc, char **argv, char **env)
 	int			i;
 
 	setup(&e, argc, argv, env);
-	get_io_files(&e);
-	i = 0;
-	firstchild(&e, i);
-	i++;
+	get_infile(&e);
+	firstchild(&e, 0);
+	//unify children in one fucntion?
+	i = 1;
 	while (i < argc - 4 - e.here_doc)
 	{
 		middlechild(&e, i);
 		i++;
 	}
+	get_outfile(&e);
 	lastchild(&e, i);
 	shutdown(&e);
 	return (0);
