@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 13:41:04 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 14:07:16 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,7 @@ void	firstchild(t_envl *e, int i)
 {
 	if (pipe(e->curr_pipe) == -1)
 		error_msg_exit(e, "pipe");
-	if (!get_cmd(e, i))
-	{
-		close(e->infile);
-		close(e->curr_pipe[1]);
-		rotate_pipes(e);
-		return ;
-	}
+	get_cmd(e, i);
 	e->pid = fork();
 	if (e->pid == -1)
 		error_msg_exit(e, "fork");
@@ -51,13 +45,7 @@ void	middlechild(t_envl *e, int i)
 {
 	if (pipe(e->curr_pipe) == -1)
 		error_msg_exit(e, "pipe");
-	if (!get_cmd(e, i))
-	{
-		close(e->prev_pipe[0]);
-		close(e->curr_pipe[1]);
-		rotate_pipes(e);
-		return ;
-	}
+	get_cmd(e, i);
 	e->pid = fork();
 	if (e->pid == -1)
 		error_msg_exit(e, "fork");
@@ -65,6 +53,9 @@ void	middlechild(t_envl *e, int i)
 	{
 		redirect_io(e, e->prev_pipe[0], e->curr_pipe[1]);
 		execve(e->command, e->input[i], e->env);
+		write(2, e->input[i][0], ft_strlen(e->input[i][0]));
+		write(2, ": command not found\n", 20);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -86,12 +77,7 @@ others only have read (4 + 0 + 0)
 */
 void	lastchild(t_envl *e, int i)
 {
-	if (!get_cmd(e, i))
-	{
-		close(e->prev_pipe[0]);
-		close(e->outfile);
-		return ;
-	}
+	get_cmd(e, i);
 	e->pid = fork();
 	if (e->pid == -1)
 		error_msg_exit(e, "fork");
@@ -99,6 +85,9 @@ void	lastchild(t_envl *e, int i)
 	{
 		redirect_io(e, e->prev_pipe[0], e->outfile);
 		execve(e->command, e->input[i], e->env);
+		write(2, e->input[i][0], ft_strlen(e->input[i][0]));
+		write(2, ": command not found\n", 20);
+		exit(EXIT_FAILURE);
 	}
 	else
 	{
@@ -117,9 +106,12 @@ void	wait_child(t_envl *e)
 		error_msg_exit(e, "waitpid");
 }
 
-void	wait_child_old(t_envl *e)
+void	redirect_io(t_envl *e, int input, int output)
 {
-	waitpid(e->pid, &e->exitstatus, 0);
-	if (!WIFEXITED(e->exitstatus))
-		error_msg_exit(e, "waitpid");
+	if (dup2(input, STDIN_FILENO) == -1)
+		error_msg_exit(e, "redirect input");
+	close(input);
+	if (dup2(output, STDOUT_FILENO) == -1)
+		error_msg_exit(e, "redirect output");
+	close(output);
 }

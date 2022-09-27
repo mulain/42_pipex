@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 18:07:20 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 11:19:59 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 14:04:26 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,17 +75,11 @@ void	get_here_doc(t_envl *e)
 	close(e->infile);
 }
 
-int	get_cmd(t_envl *e, int i)
+void	get_cmd(t_envl *e, int i)
 {
 	int		j;
 
-	if (!access(e->input[i][0], X_OK))
-	{
-		e->command = ft_strdup(e->input[i][0]);
-		return (1);
-	}
 	j = 0;
-	e->command = NULL;
 	while (e->env_paths[j] && !e->command)
 	{
 		e->command = ft_strjoin(e->env_paths[j], e->input[i][0]);
@@ -96,11 +90,8 @@ int	get_cmd(t_envl *e, int i)
 		}
 		j++;
 	}
-	if (e->command)
-		return (1);
-	write(2, e->input[i][0], ft_strlen(e->input[i][0]));
-	write(2, ": command not found\n", 20);
-	return (0);
+	if (!e->command)
+		e->command = ft_strdup(e->input[i][0]);
 }
 
 void	rotate_pipes(t_envl *e)
@@ -110,14 +101,4 @@ void	rotate_pipes(t_envl *e)
 	temp = e->prev_pipe;
 	e->prev_pipe = e->curr_pipe;
 	e->curr_pipe = temp;
-}
-
-void	redirect_io(t_envl *e, int input, int output)
-{
-	if (dup2(input, STDIN_FILENO) == -1)
-		error_msg_exit(e, "redirect input");
-	close(input);
-	if (dup2(output, STDOUT_FILENO) == -1)
-		error_msg_exit(e, "redirect output");
-	close(output);
 }
