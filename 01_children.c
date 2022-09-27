@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 22:27:48 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 23:16:07 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,7 @@ void	firstchild(t_envl *e, int i)
 		close(e->curr_pipe[0]);
 		redirect_io(e, e->infile, e->curr_pipe[1]);
 		execve(e->command, e->input[i], e->env);
-		write(2, e->input[i][0], ft_strlen(e->input[i][0]));
-		write(2, ": command not found\n", 20);
-		shutdown(e);
-		exit(EXIT_FAILURE);
+		error_execve(e, i);
 	}
 	else
 	{
@@ -54,10 +51,7 @@ void	middlechild(t_envl *e, int i)
 	{
 		redirect_io(e, e->prev_pipe[0], e->curr_pipe[1]);
 		execve(e->command, e->input[i], e->env);
-		write(2, e->input[i][0], ft_strlen(e->input[i][0]));
-		write(2, ": command not found\n", 20);
-		shutdown(e);
-		exit(EXIT_FAILURE);
+		error_execve(e, i);
 	}
 	else
 	{
@@ -87,10 +81,7 @@ void	lastchild(t_envl *e, int i)
 	{
 		redirect_io(e, e->prev_pipe[0], e->outfile);
 		execve(e->command, e->input[i], e->env);
-		write(2, e->input[i][0], ft_strlen(e->input[i][0]));
-		write(2, ": command not found\n", 20);
-		shutdown(e);
-		exit(EXIT_FAILURE);
+		error_execve(e, i);
 	}
 	else
 	{

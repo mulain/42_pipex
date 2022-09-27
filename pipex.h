@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 14:05:27 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 23:16:34 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	free2d_char(char **array);
 //08_errors.c
 void	error_argumentcount(void);
 void	error_msg_exit(t_envl *e, char *msg);
+void	error_execve(t_envl *e, int i);
 
 //09_helperfunctions.c
 void	print3d(char ***array);
