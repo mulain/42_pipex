@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 11:28:39 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 12:14:35 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	get_outfile(t_envl *e);
 void	firstchild(t_envl *e, int i);
 void	middlechild(t_envl *e, int i);
 void	lastchild(t_envl *e, int i);
-void	wait_child(t_envl *e);
+void	parent(t_envl *e);
 
 //02_utils.c
 void	get_in_file(t_envl *e);
@@ -77,5 +77,10 @@ void	error_msg_exit(t_envl *e, char *msg);
 void	print3d(char ***array);
 void	print2d(char **array);
 void	printpipefd(int	*pipe, int i);
+
+//newchild.c
+void	set_io_firstchild(t_envl *e);
+void	set_io_middlechild(t_envl *e);
+void	set_io_lastchild(t_envl *e);
 
 #endif

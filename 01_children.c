@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/19 15:14:21 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 08:39:05 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 12:14:25 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,10 @@
 
 void	firstchild(t_envl *e, int i)
 {
-	if (pipe(e->curr_pipe) == -1)
-		error_msg_exit(e, "pipe");
 	if (!get_cmd(e, i))
 	{
-		close(e->infile);
-		close(e->curr_pipe[1]);
+		close(e->child_in);
+		close(e->child_out);
 		rotate_pipes(e);
 		return ;
 	}
@@ -29,29 +27,22 @@ void	firstchild(t_envl *e, int i)
 	if (e->pid == 0)
 	{
 		close(e->curr_pipe[0]);
-		redirect_io(e, e->infile, e->curr_pipe[1]);
+		redirect_io(e, e->child_in, e->child_out);
 		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
-		wait_child(e);
-		close(e->infile);
-		close(e->curr_pipe[1]);
-		if (e->command)
-			free(e->command);
-		e->command = NULL;
+		parent(e);
 		rotate_pipes(e);
 	}
 }
 
 void	middlechild(t_envl *e, int i)
 {
-	if (pipe(e->curr_pipe) == -1)
-		error_msg_exit(e, "pipe");
 	if (!get_cmd(e, i))
 	{
-		close(e->prev_pipe[0]);
-		close(e->curr_pipe[1]);
+		close(e->child_in);
+		close(e->child_out);
 		rotate_pipes(e);
 		return ;
 	}
@@ -60,17 +51,12 @@ void	middlechild(t_envl *e, int i)
 		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
-		redirect_io(e, e->prev_pipe[0], e->curr_pipe[1]);
+		redirect_io(e, e->child_in, e->child_out);
 		execve(e->command, e->input[i], e->env);
 	}
 	else
 	{
-		wait_child(e);
-		close(e->prev_pipe[0]);
-		close(e->curr_pipe[1]);
-		if (e->command)
-			free(e->command);
-		e->command = NULL;
+		parent(e);
 		rotate_pipes(e);
 	}
 }
@@ -85,8 +71,8 @@ void	lastchild(t_envl *e, int i)
 {
 	if (!get_cmd(e, i))
 	{
-		close(e->prev_pipe[0]);
-		close(e->outfile);
+		close(e->child_in);
+		close(e->child_out);
 		return ;
 	}
 	e->pid = fork();
@@ -94,29 +80,20 @@ void	lastchild(t_envl *e, int i)
 		error_msg_exit(e, "fork");
 	if (e->pid == 0)
 	{
-		redirect_io(e, e->prev_pipe[0], e->outfile);
+		redirect_io(e, e->child_in, e->child_out);
 		execve(e->command, e->input[i], e->env);
 	}
 	else
-	{
-		wait_child(e);
-		close(e->prev_pipe[0]);
-		close(e->outfile);
-		if (e->command)
-			free(e->command);
-		e->command = NULL;
-	}
+		parent(e);
 }
 
-void	wait_child(t_envl *e)
+void	parent(t_envl *e)
 {
 	if (waitpid(e->pid, &e->exitstatus, WNOHANG) == -1)
 		error_msg_exit(e, "waitpid");
-}
-
-void	wait_child_old(t_envl *e)
-{
-	waitpid(e->pid, &e->exitstatus, 0);
-	if (!WIFEXITED(e->exitstatus))
-		error_msg_exit(e, "waitpid");
+	close(e->child_in);
+	close(e->child_out);
+	if (e->command)
+		free(e->command);
+	e->command = NULL;
 }

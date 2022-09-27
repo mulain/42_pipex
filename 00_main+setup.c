@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 08:22:34 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 11:56:48 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,18 @@ int	main(int argc, char **argv, char **env)
 
 	setup(&e, argc, argv, env);
 	get_infile(&e);
+	set_io_firstchild(&e);
 	firstchild(&e, 0);
-	//unify children in one fucntion?
 	i = 1;
+
 	while (i < argc - 4 - e.here_doc)
 	{
+		set_io_middlechild(&e);
 		middlechild(&e, i);
 		i++;
 	}
 	get_outfile(&e);
+	set_io_lastchild(&e);
 	lastchild(&e, i);
 	shutdown(&e);
 	return (0);

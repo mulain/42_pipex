@@ -6,7 +6,7 @@
 #    By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 17:11:14 by wmardin           #+#    #+#              #
-#    Updated: 2022/09/26 08:59:47 by wmardin          ###   ########.fr        #
+#    Updated: 2022/09/27 11:39:37 by wmardin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ SRC =	00_main+setup.c\
 		02_utils.c\
 		07_shutdown.c\
 		08_errors.c\
-		09_helperfunctions.c
+		09_helperfunctions.c\
+		newchild.c
 
 BLUE = \033[94m
 COLOR_END = \033[0m
