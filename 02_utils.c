@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 18:07:20 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 22:12:47 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 11:19:59 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	get_outfile(t_envl *e)
 	if (e->outfile == -1)
 		error_msg_exit(e, e->argv[e->argc - 1]);
 }
+
 /*
 ---Input table for heredoc---
 input:			pipex	heredoc	limiter	cmd_1	cmd_2	cmd_3	outfile

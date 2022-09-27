@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 10:20:42 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/26 22:13:07 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/09/27 11:28:39 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ typedef struct envelope
 	char	*tempfile;
 	int		infile;
 	int		outfile;
+	int		child_in;
+	int		child_out;
 	pid_t	pid;
 	int		exitstatus;
 	int		pipes[2][2];
