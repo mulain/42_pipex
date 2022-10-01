@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 23:29:17 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/10/01 22:02:19 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ Yes here_doc:
 malloc argc - n; n = 3 because:
 -1 for program name
 -1 for here_doc
--1 for delimiter
+-1 for limiter
 -1 for file 2
 +1 for NULL
 We want to skip the first 3 entries (i = n = 3) and the last (i < argc-1):
