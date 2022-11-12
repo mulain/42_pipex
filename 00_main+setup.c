@@ -6,7 +6,7 @@
 /*   By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 09:53:29 by wmardin           #+#    #+#             */
-/*   Updated: 2022/09/27 23:29:17 by wmardin          ###   ########.fr       */
+/*   Updated: 2022/10/20 08:21:55 by wmardin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ Array level 1: All chars from each word (single words).
 No here_doc:
 malloc argc - n; n = 2 because:
 -1 for program name
--1 for file 1
--1 for file 2
+-1 for infile
+-1 for outfile
 +1 for NULL
 We want to skip the first 2 entries (i = n = 2) and the last (i < argc-1):
 they are not execve commands.
@@ -107,8 +107,8 @@ Yes here_doc:
 malloc argc - n; n = 3 because:
 -1 for program name
 -1 for here_doc
--1 for delimiter
--1 for file 2
+-1 for limiter
+-1 for outfile
 +1 for NULL
 We want to skip the first 3 entries (i = n = 3) and the last (i < argc-1):
 they are not execve commands.
