@@ -6,7 +6,7 @@
 #    By: wmardin <wmardin@student.42wolfsburg.de>   +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/24 17:11:14 by wmardin           #+#    #+#              #
-#    Updated: 2022/09/26 08:59:47 by wmardin          ###   ########.fr        #
+#    Updated: 2022/12/06 16:15:45 by wmardin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ LIBFT = libft/libft.a
 
 $(NAME): $(LIBFT)
 	@$(CC) $(CFLAGS) $(SRC) $(LIBFT) $(DEFINE) -o $(NAME)
-	@echo "$(BLUE)$(NAME) created."
+	@echo "$(BLUE)$(NAME) created. $(COLOR_END)"
 
 $(LIBFT):
 	@make --no-print-directory -C ./libft
@@ -40,17 +40,17 @@ all: $(NAME)
 
 clean:
 	@$(RM) $(OBJ)
-	@echo "$(BLUE)clean performed."
+	@echo "$(BLUE)clean performed.$(COLOR_END)"
 
 fclean: clean
 	@$(RM) $(NAME) $(LIBFT) a.out
-	@echo "$(BLUE)fclean performed."
+	@echo "$(BLUE)fclean performed.$(COLOR_END)"
 
 re: fclean all
 
 noflag:
 	@$(CC) $(SRC) $(LIBFT) $(DEFINE) -o $(NAME)
-	@echo "$(BLUE)$(NAME) created w/o error flags."
+	@echo "$(BLUE)$(NAME) created w/o error flags.$(COLOR_END)"
 
 test:
 	@$(CC) test.c $(LIBFT) -o test
@@ -59,4 +59,4 @@ git:
 	git add .
 	git commit -m "auto add & push"
 	git push
-	@echo "$(BLUE)git auto add & push performed."
+	@echo "$(BLUE)git auto add & push performed.$(COLOR_END)"
